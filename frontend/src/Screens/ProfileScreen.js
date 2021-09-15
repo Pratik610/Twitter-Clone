@@ -52,7 +52,9 @@ const ProfileScreen = ({ history }) => {
 			history.push('/login')
 		}
 		dispatch(getLoginUserInfo(userId._id))
+
 		dispatch(tweetsOfUser(userId._id))
+
 		dispatch(getLikedTweets())
 		dispatch(getRetweetedTweets())
 	}, [history, dispatch, userId, unliked, liked, ret, unret])
@@ -110,18 +112,27 @@ const ProfileScreen = ({ history }) => {
 									</small>
 								</div>
 
-								<div className='cover pt-1 '>
-									<img
+								<div
+									className='cover pt-1  text-light'
+									style={{
+										backgroundImage: `url(uploads/${
+											userInfo.coverPhoto.split('uploads')[1]
+										})`,
+										backgroundRepeat: 'no-repeat',
+										backgroundPosition: 'center-top',
+										backgroundSize: 'cover',
+									}}>
+									{/* <img
 										className='w-100  '
-										src={`./photos/${userInfo.coverPhoto}`}
+										src={userInfo.coverPhoto}
 										alt='profile'
 										style={{ height: '100%' }}
-									/>
+									/> */}
 								</div>
 								<div className=' editprofile p-3 pb-0 pt-2'>
 									<img
 										className='img-fluid rounded-circle '
-										src={`./photos/${userInfo.profilePhoto}`}
+										src={userInfo.profilePhoto}
 										alt='profile'
 									/>
 
@@ -236,7 +247,11 @@ const ProfileScreen = ({ history }) => {
 												<Loader style={{ marginLeft: '-10%' }} />
 											</div>
 										)}
-										{tweetsError && <AlertBox error={tweetsError} />}
+										{tweetsError && (
+											<button onClick={dispatch(tweetsOfUser(userId._id))}>
+												reload
+											</button>
+										)}
 										{tweets &&
 											tweets.tweets.map((tweet) => (
 												<div
@@ -245,7 +260,7 @@ const ProfileScreen = ({ history }) => {
 													<div className='p-2 col-2'>
 														<img
 															className='dp d-block mx-auto '
-															src={`./photos/${userInfo.profilePhoto}`}
+															src={userInfo.profilePhoto}
 															alt='profile'
 														/>
 													</div>
@@ -255,8 +270,8 @@ const ProfileScreen = ({ history }) => {
 															{/* <span className='text-muted'> - 19m</span> */}
 														</h6>
 														<span
-															className='text-muted '
-															style={{ fontSize: '15px' }}>
+															className='text-muted'
+															style={{ fontSize: '0.8em' }}>
 															{userInfo.atTheRate}
 														</span>
 														<p
@@ -336,7 +351,7 @@ const ProfileScreen = ({ history }) => {
 													<div className='p-2 col-2'>
 														<img
 															className='dp d-block mx-auto '
-															src={`./photos/${tweet.userdata.profilePhoto}`}
+															src={tweet.userdata.profilePhoto}
 															alt='profile'
 														/>
 													</div>
@@ -345,9 +360,9 @@ const ProfileScreen = ({ history }) => {
 															{tweet.userdata.name}
 														</h6>
 														<span
-															className='text-muted '
-															style={{ fontSize: '15px' }}>
-															{tweet.userdata.atTheRate}{' '}
+															className='text-muted'
+															style={{ fontSize: '0.8em' }}>
+															{tweet.userdata.atTheRate}
 														</span>
 														<p
 															style={{ overflowWrap: 'break-word' }}
@@ -429,7 +444,7 @@ const ProfileScreen = ({ history }) => {
 													<div className='p-2 col-2'>
 														<img
 															className='dp d-block mx-auto '
-															src={`./photos/${tweet.userdata.profilePhoto}`}
+															src={tweet.userdata.profilePhoto}
 															alt='profile'
 														/>
 													</div>
@@ -438,9 +453,9 @@ const ProfileScreen = ({ history }) => {
 															{tweet.userdata.name}
 														</h6>
 														<span
-															className='text-muted '
-															style={{ fontSize: '15px' }}>
-															{tweet.userdata.atTheRate}{' '}
+															className='text-muted'
+															style={{ fontSize: '0.8em' }}>
+															{tweet.userdata.atTheRate}
 														</span>
 														<p
 															style={{ overflowWrap: 'break-word' }}

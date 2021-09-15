@@ -2,19 +2,38 @@ import React, { useState } from 'react'
 import { TWEET_CREATE_RESET } from '../Constants/tweetConstants'
 import { useDispatch } from 'react-redux'
 import { tweetCreate } from '../Actions/tweetAction.js'
+import axios from 'axios'
+import Loader from './Loader'
 
 const TweetModal = ({ userInfo }) => {
 	const [text, setText] = useState('')
 	const [image, setImage] = useState('')
-	const loadFile = (e) => {
-		setImage(URL.createObjectURL(e.target.files[0]))
-	}
+	const [imageLoading, setImageLoading] = useState(false)
 
 	const dispatch = useDispatch()
 
+	const uploadFileHandler = async (e) => {
+		setImageLoading(true)
+		const file = e.target.files[0]
+		const formData = new FormData()
+		formData.append('image', file)
+		try {
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			}
+			const { data } = await axios.post('/api/upload', formData, config)
+			setImage(data)
+			setImageLoading(false)
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	const tweet = (e) => {
 		e.preventDefault()
-		dispatch(tweetCreate({ user: userInfo._id, text }))
+		dispatch(tweetCreate({ user: userInfo._id, text, image }))
 		setImage('')
 		setText('')
 		dispatch({
@@ -47,15 +66,15 @@ const TweetModal = ({ userInfo }) => {
 									{' '}
 									<img
 										className='dp d-block mx-auto '
-										src={`./photos/${userInfo.profilePhoto}`}
+										src={userInfo.profilePhoto}
 										alt='profile'
 									/>
 								</div>
-								<div className='col-10 '>
+								<div className='col-10 ps-3 '>
 									<textarea
 										value={text}
 										onChange={(e) => setText(e.target.value)}
-										className='w-100 mt-2'
+										className='w-100 mt-2 mobile-text-area'
 										placeholder='Whats happening?'></textarea>
 								</div>
 							</div>
@@ -74,7 +93,7 @@ const TweetModal = ({ userInfo }) => {
 										accept=' image/jpeg, image/png'
 										name=''
 										id='file1'
-										onChange={(e) => loadFile(e)}
+										onChange={uploadFileHandler}
 										aria-describedby='fileHelpId'
 									/>
 								</div>
@@ -89,11 +108,15 @@ const TweetModal = ({ userInfo }) => {
 							</div>
 						</form>
 					</div>
+					<div className='d-flex justify-content-center'>
+						{imageLoading && <Loader className='mt-5' />}
+					</div>
+
 					{image && (
 						<>
-							<div className='img-output-modal   w-100 p-5'>
+							<div className='img-output border  w-100 '>
 								<i
-									className='fas fa-times h4 mb-0'
+									className='fas text-light fa-times h4 mb-0'
 									style={{ cursor: 'pointer' }}
 									onClick={() => setImage('')}></i>
 
@@ -101,7 +124,7 @@ const TweetModal = ({ userInfo }) => {
 									id='output'
 									src={image}
 									alt='img'
-									className='img-fluid  d-block  rounded'
+									className='img-fluid mx-auto d-block  rounded'
 								/>
 							</div>
 						</>

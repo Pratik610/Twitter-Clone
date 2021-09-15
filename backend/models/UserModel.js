@@ -34,11 +34,11 @@ const userSchema = new mongoose.Schema(
 		},
 		profilePhoto: {
 			type: String,
-			default: 'default.png',
+			default: 'uploads/default.png',
 		},
 		coverPhoto: {
 			type: String,
-			default: 'defaultBackground.png',
+			default: 'uploads/defaultBackground.png',
 		},
 		followers: [
 			{

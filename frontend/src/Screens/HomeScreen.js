@@ -147,7 +147,7 @@ const HomeScreen = ({ history }) => {
 							{/* input tweet */}
 							<div className='d-md-none'>
 								{' '}
-								<MobileNav />
+								<MobileNav userInfo={userInfo} />
 							</div>
 
 							<div className=' p-3 home d-none d-md-block'>
@@ -161,7 +161,7 @@ const HomeScreen = ({ history }) => {
 								<div className=' col-2'>
 									<img
 										className='dp d-block mx-auto mt-2'
-										src={`./photos/${userInfo.profilePhoto}`}
+										src={userInfo.profilePhoto}
 										alt='profile'
 									/>
 								</div>
@@ -239,18 +239,18 @@ const HomeScreen = ({ history }) => {
 										<div className='p-2 col-2'>
 											<img
 												className='dp d-block mx-auto '
-												src={`./photos/${tweet.userdata.profilePhoto}`}
+												src={tweet.userdata.profilePhoto}
 												alt='profile'
 											/>
 										</div>
-										<div className='col-10 pt-2 text-light p-1'>
+										<div className='col-10 pt-2 text-light p-1 ps-3'>
 											<h6 className='mb-0 roboto  d-inline-block pe-1'>
 												{tweet.userdata.name}
 											</h6>
 											<span
-												className='text-muted '
-												style={{ fontSize: '15px' }}>
-												{tweet.userdata.atTheRate}{' '}
+												className='text-muted'
+												style={{ fontSize: '0.8em' }}>
+												{tweet.userdata.atTheRate}
 											</span>
 											<p
 												style={{ overflowWrap: 'break-word' }}

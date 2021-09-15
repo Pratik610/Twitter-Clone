@@ -8,12 +8,20 @@ import Loader from '../Components/Loader.js'
 import AlertBox from '../Components/AlertBox.js'
 import TweetModal from '../Components/TweetModal'
 import MobileNav from '../Components/MobileNav'
-import { getUserById, followUser, unfollowUser } from '../Actions/userAction.js'
+import {
+	getUserById,
+	followUser,
+	unfollowUser,
+	getLoginUserInfo,
+} from '../Actions/userAction.js'
 import { tweetsOfUser } from '../Actions/tweetAction.js'
 
 const UserProfileScreen = ({ history, match }) => {
 	const userById = useSelector((state) => state.userById)
 	const { userData, loading, error } = userById
+
+	const userLoginInfo = useSelector((state) => state.userLoginInfo)
+	const { userInfo } = userLoginInfo
 
 	const userLogin = useSelector((state) => state.userLogin)
 	const { userId, loading: homeLoading } = userLogin
@@ -36,9 +44,12 @@ const UserProfileScreen = ({ history, match }) => {
 	}
 
 	useEffect(() => {
-		dispatch(tweetsOfUser(match.params.id))
-		dispatch(getUserById(match.params.id))
-	}, [dispatch, match.params.id, follow, unfollow])
+		if (userId) {
+			dispatch(getLoginUserInfo(userId._id))
+			dispatch(tweetsOfUser(match.params.id))
+			dispatch(getUserById(match.params.id))
+		}
+	}, [dispatch, match.params.id, follow, unfollow, userId])
 
 	return (
 		<>
@@ -62,7 +73,7 @@ const UserProfileScreen = ({ history, match }) => {
 							<div className=' pt-0 profile'>
 								<div className='d-md-none'>
 									{' '}
-									<MobileNav />
+									<MobileNav userInfo={userInfo} />
 								</div>
 								<div className='d-none d-md-block'>
 									<h5 className='roboto ms-2 text-capitalize font-weight-bold text-light mb-0'>
@@ -73,18 +84,27 @@ const UserProfileScreen = ({ history, match }) => {
 									</small>
 								</div>
 
-								<div className='cover pt-1 '>
-									<img
+								<div
+									className='cover pt-1 '
+									style={{
+										backgroundImage: `url(uploads/${
+											userData.coverPhoto.split('uploads')[1]
+										})`,
+										backgroundRepeat: 'no-repeat',
+										backgroundPosition: 'center-top',
+										backgroundSize: 'cover',
+									}}>
+									{/* <img
 										className='w-100  '
-										src={`/photos/${userData.coverPhoto}`}
+										src={userData.coverPhoto}
 										alt='profile'
 										style={{ height: '100%' }}
-									/>
+									/> */}
 								</div>
 								<div className=' editprofile p-3 pb-0 pt-2'>
 									<img
 										className='img-fluid rounded-circle '
-										src={`./photos/${userData.profilePhoto}`}
+										src={userData.profilePhoto}
 										alt='profile'
 									/>
 
@@ -216,7 +236,7 @@ const UserProfileScreen = ({ history, match }) => {
 													<div className='p-2 col-2'>
 														<img
 															className='dp d-block mx-auto '
-															src={`./photos/${userData.profilePhoto}`}
+															src={userData.profilePhoto}
 															alt='profile'
 														/>
 													</div>
@@ -227,7 +247,7 @@ const UserProfileScreen = ({ history, match }) => {
 														</h6>
 														<span
 															className='text-muted p-1'
-															style={{ fontSize: '12px' }}>
+															style={{ fontSize: '0.8em' }}>
 															{userData.atTheRate}
 														</span>
 														<p>{t.text}</p>

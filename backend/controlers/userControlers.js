@@ -48,7 +48,9 @@ const editUserProfile = asyncHandler(async (req, res) => {
 	if (user) {
 		user.name = req.body.name || user.name
 		user.bio = req.body.bio || user.bio
-		user.website = req.body.website || user.bio
+		user.website = req.body.website || user.website
+		user.coverPhoto = req.body.coverPhoto || user.coverPhoto
+		user.profilePhoto = req.body.profilePhoto || user.profilePhoto
 
 		const updatedUser = await user.save()
 		res.json({

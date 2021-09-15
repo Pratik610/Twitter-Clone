@@ -19,7 +19,7 @@ app.use('/api/upload', uploadRoutes)
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
-if (process.env.ENVIRONMENT === 'development') {
+if (process.env.ENVIRONMENT === 'production') {
 	app.use(express.static(path.join(__dirname, '/frontend/build')))
 
 	app.get('*', (req, res) =>

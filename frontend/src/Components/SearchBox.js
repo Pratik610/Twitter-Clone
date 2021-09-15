@@ -40,18 +40,20 @@ const SearchBox = () => {
 			{searchResult && (
 				<div className='results '>
 					{searchResult.map((user) => (
-						<Link to={`/${user._id}`}>
+						<Link to={`/${user._id}`} className='text-decoration-none'>
 							<div className='d-flex tweets pb-3 pt-2'>
 								<div className='p-2 col-2'>
 									<img
 										className='dp d-block mx-auto '
-										src={`./photos/${user.profilePhoto}`}
+										src={user.profilePhoto}
 										alt='profile'
 									/>
 								</div>
 								<div className='col-10 pt-2 text-light ps-3'>
 									<h6 className='mb-0 roboto '>{user.name}</h6>
-									<span className='text-muted p-1' style={{ fontSize: '12px' }}>
+									<span
+										className='text-muted  mt-0'
+										style={{ fontSize: '0.9em' }}>
 										{user.atTheRate}
 									</span>
 								</div>

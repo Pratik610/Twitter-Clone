@@ -25,6 +25,7 @@ import {
 	USER_UNFOLLOW_REQUEST,
 	USER_UNFOLLOW_SUCCESS,
 	USER_INFO_SUCCESS,
+	USER_UPDATE_RESET,
 } from '../Constants/userConstants.js'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -78,6 +79,8 @@ export const userUpdateReducer = (state = {}, action) => {
 			return { loading: false, updatedUser: action.payload }
 		case USER_UPDATE_FAIL:
 			return { loading: false, error: action.payload }
+		case USER_UPDATE_RESET:
+			return {}
 		default:
 			return state
 	}

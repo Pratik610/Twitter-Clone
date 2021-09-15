@@ -130,7 +130,8 @@ export const logoutUser = () => async (dispatch) => {
 }
 
 export const updateUser =
-	(name, bio, website) => async (dispatch, getState) => {
+	(name, bio, website, coverPhoto, profilePhoto) =>
+	async (dispatch, getState) => {
 		try {
 			dispatch({
 				type: USER_UPDATE_REQUEST,
@@ -147,7 +148,7 @@ export const updateUser =
 			}
 			const { data } = await axios.put(
 				'/api/users/edit',
-				{ name, bio, website },
+				{ name, bio, website, coverPhoto, profilePhoto },
 				config
 			)
 

@@ -3,36 +3,84 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from '../Actions/userAction.js'
 import AlertBox from '../Components/AlertBox'
 import Sidenav from '../Components/Sidenav.js'
+import axios from 'axios'
+
 import { Link } from 'react-router-dom'
 
 import News from '../Components/News.js'
+import { USER_UPDATE_RESET } from '../Constants/userConstants.js'
+import Loader from '../Components/Loader.js'
 const EditProfileScreen = ({ history }) => {
 	const dispatch = useDispatch()
 	const userLogin = useSelector((state) => state.userLogin)
 	const { userId } = userLogin
+
 	const userLoginInfo = useSelector((state) => state.userLoginInfo)
 	const { userInfo } = userLoginInfo
 
-	const [name, setName] = useState(userInfo.name)
-	const [bio, setBio] = useState(userInfo.bio)
-	const [website, setWebsite] = useState(userInfo.website)
-
 	const userUpdate = useSelector((state) => state.userUpdate)
 	const { error, updatedUser } = userUpdate
+	const [name, setName] = useState(userInfo && userInfo.name)
+	const [bio, setBio] = useState(userInfo && userInfo.bio)
+	const [website, setWebsite] = useState(userInfo && userInfo.website)
+	const [profilePhoto, setProfilePhoto] = useState(
+		userInfo && userInfo.profilePhoto
+	)
+	const [coverPhoto, setCoverPhoto] = useState(userInfo && userInfo.coverPhoto)
+	const [imageLoading, setImageLoading] = useState(false)
 
 	const update = (e) => {
 		e.preventDefault()
-		dispatch(updateUser(name, bio, website))
+		dispatch(updateUser(name, bio, website, coverPhoto, profilePhoto))
+		dispatch({
+			type: USER_UPDATE_RESET,
+		})
+		history.push('/profile')
 	}
 
 	useEffect(() => {
-		if (updatedUser) {
-			history.push('/profile')
-		}
 		if (!userId) {
 			history.push('/login')
 		}
-	}, [history, userId, updatedUser])
+	}, [dispatch, history, userId, updatedUser, userInfo, coverPhoto])
+
+	const uploadCoverPhotoHandler = async (e) => {
+		setImageLoading(true)
+		const file = e.target.files[0]
+		const formData = new FormData()
+		formData.append('image', file)
+		try {
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			}
+			const { data } = await axios.post('/api/upload', formData, config)
+			setCoverPhoto(data)
+			setImageLoading(false)
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	const uploadProfilePhotoHandler = async (e) => {
+		setImageLoading(true)
+		const file = e.target.files[0]
+		const formData = new FormData()
+		formData.append('image', file)
+		try {
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			}
+			const { data } = await axios.post('/api/upload', formData, config)
+			setProfilePhoto(data)
+			setImageLoading(false)
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
 	return (
 		<div className='container '>
@@ -58,18 +106,50 @@ const EditProfileScreen = ({ history }) => {
 						</div>
 					</div>
 
-					<form onSubmit={update}>
-						<div className='cover pt-1 edit-cover  text-light'>
-							<img
-								className='w-100  '
-								src={`./photos/${userInfo.coverPhoto}`}
-								alt='profile'
-								style={{ height: '100%' }}
-							/>
+					<form onSubmit={update} className='p-1'>
+						<div className=' p-2 home d-none d-md-block'>
+							<h5
+								className='roboto font-weight-bold text-light'
+								style={{ fontSize: '20px' }}>
+								Edit Profile
+							</h5>
+						</div>
+						<div
+							className='cover pt-1 edit-cover  text-light'
+							style={{
+								backgroundImage: `url(uploads/${
+									coverPhoto.split('uploads')[1]
+								})`,
+								backgroundRepeat: 'no-repeat',
+								backgroundPosition: 'center-top',
+								backgroundSize: 'cover',
+							}}>
+							{imageLoading && <Loader />}
 
-							<div className='edit-option d-flex justify-content-around'>
-								<i class='fas fa-camera h3'></i>
-								<i class='fas fa-times h3'></i>
+							<div className='edit-option w-100 h-100 '>
+								<div
+									className='d-flex w-75 justify-content-center'
+									style={{
+										position: 'relative',
+										top: '50%',
+										left: '50%',
+										transform: 'translate(-50%,-50%)',
+									}}>
+									<label htmlFor='cover' className=' col-3 '>
+										<i
+											className='fas fa-camera h3'
+											style={{ cursor: 'pointer' }}></i>
+									</label>
+									<input
+										type='file'
+										hidden
+										accept=' image/jpeg, image/png'
+										className='form-control-file '
+										onChange={uploadCoverPhotoHandler}
+										id='cover'
+									/>
+									<i class='fas fa-times h3'></i>
+								</div>
 							</div>
 						</div>
 
@@ -78,9 +158,22 @@ const EditProfileScreen = ({ history }) => {
 							style={{ position: 'relative' }}>
 							<img
 								className='img-fluid rounded-circle '
-								src={`./photos/${userInfo.profilePhoto}`}
+								src={profilePhoto}
 								alt='profile'
+								onClick={() => {
+									document.getElementById('profile-file').click()
+								}}
+								htmlFor='profile-file'
 								style={{ zIndex: '3' }}
+							/>
+
+							<input
+								type='file'
+								hidden
+								accept=' image/jpeg, image/png'
+								className='form-control-file '
+								onChange={uploadProfilePhotoHandler}
+								id='profile-file'
 							/>
 						</div>
 
