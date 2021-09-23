@@ -27,6 +27,21 @@ import {
 	RETWEETED_TWEETS_REQUEST,
 	RETWEETED_TWEETS_SUCCESS,
 	RETWEETED_TWEETS_FAIL,
+	GET_TWEET_BY_ID_FAIL,
+	GET_TWEET_BY_ID_REQUEST,
+	GET_TWEET_BY_ID_SUCCESS,
+	GET_REPLIED_REQUEST,
+	GET_REPLIED_SUCCESS,
+	GET_REPLIED_FAIL,
+	TWEET_BOOKMARK_REQUEST,
+	TWEET_BOOKMARK_SUCCESS,
+	TWEET_BOOKMARK_FAIL,
+	TWEET_UNBOOKMARK_REQUEST,
+	TWEET_UNBOOKMARK_SUCCESS,
+	TWEET_UNBOOKMARK_FAIL,
+	GET_BOOKMARKED_REQUEST,
+	GET_BOOKMARKED_SUCCESS,
+	GET_BOOKMARKED_FAIL,
 } from '../Constants/tweetConstants.js'
 
 export const tweetCreateReducer = (state = {}, action) => {
@@ -143,6 +158,71 @@ export const tweetRetweetedReducer = (state = {}, action) => {
 		case RETWEETED_TWEETS_SUCCESS:
 			return { loading: false, retweetedTweets: action.payload }
 		case RETWEETED_TWEETS_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const tweetByIdReducer = (state = {}, action) => {
+	switch (action.type) {
+		case GET_TWEET_BY_ID_REQUEST:
+			return { loading: true }
+		case GET_TWEET_BY_ID_SUCCESS:
+			return { loading: false, tweetData: action.payload }
+		case GET_TWEET_BY_ID_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const repliedTweetsReducer = (state = {}, action) => {
+	switch (action.type) {
+		case GET_REPLIED_REQUEST:
+			return { loading: true }
+		case GET_REPLIED_SUCCESS:
+			return { loading: false, repliedTweets: action.payload }
+		case GET_REPLIED_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const bookmarkTweetReducer = (state = {}, action) => {
+	switch (action.type) {
+		case TWEET_BOOKMARK_REQUEST:
+			return { loading: true }
+		case TWEET_BOOKMARK_SUCCESS:
+			return { loading: false, bookmarkedTweet: true }
+		case TWEET_BOOKMARK_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const unbookmarkTweetReducer = (state = {}, action) => {
+	switch (action.type) {
+		case TWEET_UNBOOKMARK_REQUEST:
+			return { loading: true }
+		case TWEET_UNBOOKMARK_SUCCESS:
+			return { loading: false, unbookmarkedTweet: true }
+		case TWEET_UNBOOKMARK_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const bookmarkedTweetsReducer = (state = {}, action) => {
+	switch (action.type) {
+		case GET_BOOKMARKED_REQUEST:
+			return { loading: true }
+		case GET_BOOKMARKED_SUCCESS:
+			return { loading: false, bookmarkedTweets: action.payload }
+		case GET_BOOKMARKED_FAIL:
 			return { loading: false, error: action.payload }
 		default:
 			return state

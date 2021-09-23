@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import FullScreenLoader from '../Components/FullScreenLoader.js'
 import AlertBox from '../Components/AlertBox.js'
 import { registerUser } from '../Actions/userAction.js'
+import { Link } from 'react-router-dom'
 
 const SignupScreen = ({ history }) => {
 	const [name, setName] = useState('')
@@ -180,9 +181,15 @@ const SignupScreen = ({ history }) => {
 							<div className=' mt-md-3 mt-5  '>
 								<button
 									type='submit'
-									className='tweet-btn d-block w-md-75 signup-btn  mx-auto mt-4 pt-2 pb-2'>
+									className=' tweet-btn btn d-block w-md-75 signup-btn  mx-auto mt-4 pt-2 pb-2'>
 									<h6 style={{ fontSize: '1.1em' }}>Next</h6>
 								</button>
+								<p className='text-center mt-3'>
+									{' '}
+									<Link to={'/login'} className='text-decoration-none'>
+										Allready have an account ?
+									</Link>{' '}
+								</p>
 							</div>
 						</form>
 					</div>

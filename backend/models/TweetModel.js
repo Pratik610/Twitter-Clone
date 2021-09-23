@@ -10,21 +10,26 @@ const tweetSchema = new mongoose.Schema(
 			type: String,
 			require: true,
 		},
+
+		type: {
+			type: String,
+			default: 'tweet',
+		},
+
+		refTweetId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Tweet',
+		},
 		image: {
 			type: String,
 		},
-		messages: [
+		likes: [
 			{
-				_id: {
-					type: mongoose.Schema.Types.ObjectId,
-					ref: 'User',
-				},
-				message: {
-					type: String,
-				},
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'User',
 			},
 		],
-		likes: [
+		bookmark: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
 				ref: 'User',

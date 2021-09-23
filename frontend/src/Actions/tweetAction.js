@@ -27,6 +27,21 @@ import {
 	RETWEETED_TWEETS_FAIL,
 	RETWEETED_TWEETS_REQUEST,
 	RETWEETED_TWEETS_SUCCESS,
+	GET_TWEET_BY_ID_REQUEST,
+	GET_TWEET_BY_ID_SUCCESS,
+	GET_TWEET_BY_ID_FAIL,
+	GET_REPLIED_FAIL,
+	GET_REPLIED_REQUEST,
+	GET_REPLIED_SUCCESS,
+	TWEET_BOOKMARK_REQUEST,
+	TWEET_BOOKMARK_SUCCESS,
+	TWEET_BOOKMARK_FAIL,
+	TWEET_UNBOOKMARK_REQUEST,
+	TWEET_UNBOOKMARK_SUCCESS,
+	TWEET_UNBOOKMARK_FAIL,
+	GET_BOOKMARKED_REQUEST,
+	GET_BOOKMARKED_SUCCESS,
+	GET_BOOKMARKED_FAIL,
 } from '../Constants/tweetConstants.js'
 
 export const tweetCreate = (tweetInfo) => async (dispatch, getState) => {
@@ -105,6 +120,39 @@ export const followingTweets = (_id) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: FOLLOWING_TWEETS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const getRepliedTweets = (_id) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: GET_REPLIED_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		const { data } = await axios.get(`/api/tweet/replied/${_id}`, config)
+		data &&
+			dispatch({
+				type: GET_REPLIED_SUCCESS,
+				payload: data,
+			})
+	} catch (error) {
+		dispatch({
+			type: GET_REPLIED_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message
@@ -241,6 +289,70 @@ export const unretweet = (id) => async (dispatch, getState) => {
 	}
 }
 
+export const bookmark = (id) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: TWEET_BOOKMARK_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		await axios.post('/api/tweet/bookmark', { id }, config)
+
+		dispatch({
+			type: TWEET_BOOKMARK_SUCCESS,
+		})
+	} catch (error) {
+		dispatch({
+			type: TWEET_BOOKMARK_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const unbookmark = (id) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: TWEET_UNBOOKMARK_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		await axios.post('/api/tweet/unbookmark', { id }, config)
+
+		dispatch({
+			type: TWEET_UNBOOKMARK_SUCCESS,
+		})
+	} catch (error) {
+		dispatch({
+			type: TWEET_UNBOOKMARK_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
 export const getLikedTweets = () => async (dispatch, getState) => {
 	try {
 		dispatch({
@@ -299,6 +411,72 @@ export const getRetweetedTweets = () => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: RETWEETED_TWEETS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const getBookmarkedTweets = () => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: GET_BOOKMARKED_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		const { data } = await axios.get('/api/tweet/bookmarked', config)
+
+		dispatch({
+			type: GET_BOOKMARKED_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: GET_BOOKMARKED_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const getTweetById = (id) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: GET_TWEET_BY_ID_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		const { data } = await axios.get(`/api/tweet/tweet/${id}`, config)
+
+		dispatch({
+			type: GET_TWEET_BY_ID_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: GET_TWEET_BY_ID_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

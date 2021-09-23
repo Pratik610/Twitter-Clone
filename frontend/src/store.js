@@ -21,6 +21,11 @@ import {
 	tweetUnretweetReducer,
 	tweetLikedReducer,
 	tweetRetweetedReducer,
+	tweetByIdReducer,
+	repliedTweetsReducer,
+	bookmarkTweetReducer,
+	unbookmarkTweetReducer,
+	bookmarkedTweetsReducer,
 } from './Reducers/tweetReducer.js'
 
 const reducer = combineReducers({
@@ -41,6 +46,11 @@ const reducer = combineReducers({
 	tweetUnretweet: tweetUnretweetReducer,
 	tweetLiked: tweetLikedReducer,
 	tweetRetweeted: tweetRetweetedReducer,
+	tweetById: tweetByIdReducer,
+	repliedTweets: repliedTweetsReducer,
+	bookmarkTweet: bookmarkTweetReducer,
+	unbookmarkTweet: unbookmarkTweetReducer,
+	bookmarkedTweets: bookmarkedTweetsReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userId')

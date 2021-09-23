@@ -6,12 +6,18 @@ import asyncHandler from 'express-async-handler'
 // req / route -  POST , /
 // access - public
 export const createTweet = asyncHandler(async (req, res) => {
-	const { user, text, image } = req.body
+	const user = req.user._id
+	const text = req.body.text
+	const image = req.body.image
+	const type = req.body.type || 'tweet'
+	const refTweetId = req.body.refTweetId
 
 	const tweet = await Tweet.create({
 		user,
 		text,
 		image,
+		type,
+		refTweetId,
 	})
 
 	if (tweet) {
@@ -64,6 +70,24 @@ export const getFollowingUsersTweets = asyncHandler(async (req, res) => {
 	} else {
 		res.status(400)
 		throw new Error('invalid User data')
+	}
+})
+
+// desc - get tweet by id
+// req / route -  GET
+// access - private
+export const getTweetById = asyncHandler(async (req, res) => {
+	const tweet = await Tweet.findById(req.params.id)
+	const user = await User.findById(tweet.user)
+
+	if (tweet) {
+		res.status(201).json({
+			tweet,
+			user,
+		})
+	} else {
+		res.status(400)
+		throw new Error('invalid Tweet')
 	}
 })
 
@@ -139,6 +163,42 @@ export const unretweet = asyncHandler(async (req, res) => {
 	}
 })
 
+// desc - bookmark
+// req / route -  POST , /api/tweet/bookmark
+// access - private
+export const bookmarkTweet = asyncHandler(async (req, res) => {
+	const tweet = await Tweet.findById(req.body.id)
+	const user = await User.findById(req.user._id)
+
+	tweet.bookmark.push(user._id)
+	const result = await tweet.save()
+
+	if (result) {
+		res.status(201).json('Bookmarked!!')
+	} else {
+		res.status(404)
+		throw new Error('User not Found')
+	}
+})
+
+// desc - bookmark
+// req / route -  POST , /api/tweet/unbookmark
+// access - private
+export const unbookmarkTweet = asyncHandler(async (req, res) => {
+	const tweet = await Tweet.findById(req.body.id)
+	const user = await User.findById(req.user._id)
+
+	tweet.bookmark.splice(tweet.bookmark.indexOf(user._id, 1))
+	const result = await tweet.save()
+
+	if (result) {
+		res.status(201).json({ message: 'Undo Bookmark!!' })
+	} else {
+		res.status(404)
+		throw new Error('Tweet not Found')
+	}
+})
+
 // desc - get liked tweets
 // req / route -  POST , /api/tweet/liked
 // access - private
@@ -167,6 +227,49 @@ export const likedTweets = asyncHandler(async (req, res) => {
 // access - private
 export const retweetedTweets = asyncHandler(async (req, res) => {
 	const tweets = await Tweet.find({ retweets: req.user._id }).sort({
+		createdAt: -1,
+	})
+
+	let userList = []
+	for (let index = 0; index < tweets.length; index++) {
+		userList.push(tweets[index].user)
+	}
+
+	const users = await User.find({ _id: userList })
+
+	if (tweets) {
+		res.status(201).json({ tweets, users })
+	} else {
+		res.status(404)
+		throw new Error('User not Found')
+	}
+})
+
+// desc - get Bookmarked tweets
+// req / route -  POST , /api/tweet/bookmarked
+// access - private
+export const bookmarkedTweets = asyncHandler(async (req, res) => {
+	const tweets = await Tweet.find({ bookmark: req.user._id })
+	let userList = []
+	for (let index = 0; index < tweets.length; index++) {
+		userList.push(tweets[index].user)
+	}
+
+	const users = await User.find({ _id: userList })
+
+	if (tweets) {
+		res.status(201).json({ tweets, users })
+	} else {
+		res.status(404)
+		throw new Error('User not Found')
+	}
+})
+
+// desc - get Tweet Replys
+// req / route - GET , /api/tweet/replied
+// access - private
+export const repliedTweets = asyncHandler(async (req, res) => {
+	const tweets = await Tweet.find({ refTweetId: req.params.id }).sort({
 		createdAt: -1,
 	})
 

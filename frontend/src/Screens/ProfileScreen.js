@@ -51,12 +51,12 @@ const ProfileScreen = ({ history }) => {
 		if (!userId) {
 			history.push('/login')
 		}
-		dispatch(getLoginUserInfo(userId._id))
-
-		dispatch(tweetsOfUser(userId._id))
-
-		dispatch(getLikedTweets())
-		dispatch(getRetweetedTweets())
+		if (userId._id) {
+			dispatch(getLoginUserInfo(userId._id))
+			dispatch(tweetsOfUser(userId._id))
+			dispatch(getLikedTweets())
+			dispatch(getRetweetedTweets())
+		}
 	}, [history, dispatch, userId, unliked, liked, ret, unret])
 
 	if (retweetedTweets) {
@@ -131,7 +131,7 @@ const ProfileScreen = ({ history }) => {
 								</div>
 								<div className=' editprofile p-3 pb-0 pt-2'>
 									<img
-										className='img-fluid rounded-circle '
+										className='img-fluid  rounded-circle '
 										src={userInfo.profilePhoto}
 										alt='profile'
 									/>
@@ -185,7 +185,7 @@ const ProfileScreen = ({ history }) => {
 									className='nav   text-center text-light pb-0 nav-tabs d-flex '
 									id='myTab'
 									role='tablist'>
-									<li className='nav-item  p-2 pb-0 col-4' role='presentation'>
+									<li className='nav-item  pt-2 pb-0 col-4' role='presentation'>
 										<div
 											className='active  pb-0'
 											id='home-tab'
@@ -204,7 +204,7 @@ const ProfileScreen = ({ history }) => {
 											</p>
 										</div>
 									</li>
-									<li className='nav-item p-2  pb-0 col-4' role='presentation'>
+									<li className='nav-item pt-2 pb-0 col-4' role='presentation'>
 										<div
 											id='profile-tab'
 											data-bs-toggle='tab'
@@ -219,7 +219,7 @@ const ProfileScreen = ({ history }) => {
 											</p>
 										</div>
 									</li>
-									<li className='nav-item p-2 pb-0 col-4' role='presentation'>
+									<li className='nav-item pt-2 pb-0 col-4' role='presentation'>
 										<div
 											id='contact-tab'
 											data-bs-toggle='tab'
@@ -255,16 +255,16 @@ const ProfileScreen = ({ history }) => {
 										{tweets &&
 											tweets.tweets.map((tweet) => (
 												<div
-													className='d-flex tweets pb-3 pt-2'
+													className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 													key={tweet._id}>
-													<div className='p-2 col-2'>
+													<div className='p-2 col-2 col-md-1'>
 														<img
 															className='dp d-block mx-auto '
 															src={userInfo.profilePhoto}
 															alt='profile'
 														/>
 													</div>
-													<div className='col-10 pt-2 text-light p-1'>
+													<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
 														<h6 className='mb-0 roboto d-inline-block pe-1'>
 															{userInfo.name}
 															{/* <span className='text-muted'> - 19m</span> */}
@@ -290,7 +290,7 @@ const ProfileScreen = ({ history }) => {
 																/>
 															</div>
 														)}
-														<div className='d-flex mt-1 text-muted '>
+														<div className='d-flex mt-2 text-muted '>
 															<div className='col-3'>
 																<i className='far fa-comment  '></i>
 															</div>
@@ -346,41 +346,53 @@ const ProfileScreen = ({ history }) => {
 										{retweetedTweets &&
 											retweetedTweets.tweets.map((tweet) => (
 												<div
-													className='d-flex mt-1 tweets pb-2'
+													className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 													key={tweet._id}>
-													<div className='p-2 col-2'>
-														<img
-															className='dp d-block mx-auto '
-															src={tweet.userdata.profilePhoto}
-															alt='profile'
-														/>
+													<div className='p-2 col-2 col-md-1'>
+														<Link to={`/${tweet.userdata._id}`}>
+															<img
+																className='dp d-block mx-auto '
+																src={tweet.userdata.profilePhoto}
+																alt='profile'
+															/>
+														</Link>
 													</div>
-													<div className='col-10 pt-2 text-light p-1'>
-														<h6 className='mb-0 roboto  d-inline-block pe-1'>
-															{tweet.userdata.name}
-														</h6>
-														<span
-															className='text-muted'
-															style={{ fontSize: '0.8em' }}>
-															{tweet.userdata.atTheRate}
-														</span>
-														<p
-															style={{ overflowWrap: 'break-word' }}
-															className='mb-0 mt-0  '>
-															{tweet.text}
-														</p>
-														{tweet.image && (
-															<div className='img-output mb-2    w-100  '>
-																<img
-																	id='output'
-																	style={{ width: '90%', height: '90%' }}
-																	src={tweet.image}
-																	alt='img'
-																	className='img-fluid  d-block  rounded'
-																/>
-															</div>
-														)}
-														<div className='d-flex mt-1 text-muted '>
+													<div className='col-10 col-md-11 pt-2 text-light p-1  ps-2 ps-md-4'>
+														<Link
+															to={`/${tweet.userdata._id}`}
+															className='text-decoration-none text-light'>
+															<h6 className='mb-0 roboto d-inline-block pe-1'>
+																{tweet.userdata.name}
+																{/* <span className='text-muted'> - 19m</span> */}
+															</h6>
+															<span
+																className='text-muted'
+																style={{ fontSize: '0.8em' }}>
+																{tweet.userdata.atTheRate}
+															</span>
+														</Link>
+														<Link
+															to={`/tweet/${tweet._id}`}
+															className='text-decoration-none text-light'>
+															<p
+																style={{ overflowWrap: 'break-word' }}
+																className='mb-0'>
+																{tweet.text}
+															</p>
+															{tweet.image && (
+																<div className='img-output mb-2    w-100  '>
+																	<img
+																		id='output'
+																		style={{ width: '90%', height: '90%' }}
+																		src={tweet.image}
+																		alt='img'
+																		className='img-fluid  d-block  rounded'
+																	/>
+																</div>
+															)}
+														</Link>
+
+														<div className='d-flex mt-2 text-muted '>
 															<div className='col-3'>
 																<i className='far fa-comment  '></i>
 															</div>
@@ -419,6 +431,9 @@ const ProfileScreen = ({ history }) => {
 																		}}></i>
 																)}{' '}
 																{tweet.likes.length}
+															</div>
+															<div className='col-3'>
+																<i className='far fa-bookmark'></i>
 															</div>
 														</div>
 													</div>
@@ -439,41 +454,52 @@ const ProfileScreen = ({ history }) => {
 										{likedTweets &&
 											likedTweets.tweets.map((tweet) => (
 												<div
-													className='d-flex mt-1 tweets pb-2'
+													className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 													key={tweet._id}>
-													<div className='p-2 col-2'>
-														<img
-															className='dp d-block mx-auto '
-															src={tweet.userdata.profilePhoto}
-															alt='profile'
-														/>
+													<div className='p-2 col-2 col-md-1'>
+														<Link to={`/${tweet.userdata._id}`}>
+															<img
+																className='dp d-block mx-auto '
+																src={tweet.userdata.profilePhoto}
+																alt='profile'
+															/>
+														</Link>
 													</div>
-													<div className='col-10 pt-2 text-light p-1'>
-														<h6 className='mb-0 roboto  d-inline-block pe-1'>
-															{tweet.userdata.name}
-														</h6>
-														<span
-															className='text-muted'
-															style={{ fontSize: '0.8em' }}>
-															{tweet.userdata.atTheRate}
-														</span>
-														<p
-															style={{ overflowWrap: 'break-word' }}
-															className='mb-0 mt-0  '>
-															{tweet.text}
-														</p>
-														{tweet.image && (
-															<div className='img-output mb-2    w-100  '>
-																<img
-																	id='output'
-																	style={{ width: '90%', height: '90%' }}
-																	src={tweet.image}
-																	alt='img'
-																	className='img-fluid  d-block  rounded'
-																/>
-															</div>
-														)}
-														<div className='d-flex mt-1 text-muted '>
+													<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
+														<Link
+															to={`/${tweet.userdata._id}`}
+															className='text-decoration-none text-light'>
+															<h6 className='mb-0 roboto d-inline-block pe-1'>
+																{tweet.userdata.name}
+																{/* <span className='text-muted'> - 19m</span> */}
+															</h6>
+															<span
+																className='text-muted'
+																style={{ fontSize: '0.8em' }}>
+																{tweet.userdata.atTheRate}
+															</span>
+														</Link>
+														<Link
+															to={`/tweet/${tweet._id}`}
+															className='text-decoration-none text-light'>
+															<p
+																style={{ overflowWrap: 'break-word' }}
+																className='mb-0'>
+																{tweet.text}
+															</p>
+															{tweet.image && (
+																<div className='img-output mb-2    w-100  '>
+																	<img
+																		id='output'
+																		style={{ width: '90%', height: '90%' }}
+																		src={tweet.image}
+																		alt='img'
+																		className='img-fluid  d-block  rounded'
+																	/>
+																</div>
+															)}
+														</Link>
+														<div className='d-flex mt-2 text-muted '>
 															<div className='col-3'>
 																<i className='far fa-comment  '></i>
 															</div>
@@ -512,6 +538,9 @@ const ProfileScreen = ({ history }) => {
 																		}}></i>
 																)}{' '}
 																{tweet.likes.length}
+															</div>
+															<div className='col-3'>
+																<i className='far fa-bookmark'></i>
 															</div>
 														</div>
 													</div>

@@ -3,7 +3,7 @@
 
 /* width */
 ::-webkit-scrollbar {
-	width: 3px;
+	width: 1px;
 }
 
 /* Track */
@@ -43,6 +43,9 @@ body {
 	background-color: #1da1f2;
 	color: white;
 }
+.w-0 {
+	width: 0% !important;
+}
 
 .acc img {
 	width: 50px;
@@ -61,10 +64,16 @@ body {
 }
 .dp {
 	width: 3rem;
+	/* width: 50px;
+	height: 50px; */
+
 	border-radius: 50%;
 }
 .tweets-section {
 	border-left: 1px solid grey;
+}
+.border-bottom {
+	border-bottom: 1px solid grey !important;
 }
 
 .tweets-section textarea {
@@ -97,7 +106,7 @@ body {
 }
 
 .tweets {
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid rgb(47, 51, 54);
 }
 
 .gif {
@@ -114,7 +123,7 @@ body {
 /* ................................................. */
 
 .news {
-	border-left: 1px solid grey;
+	border-left: 1px solid rgb(47, 51, 54);
 }
 .news section {
 	background-color: #15181c;
@@ -140,7 +149,7 @@ body {
 .active {
 	background-color: none !important;
 	color: #1da1f2 !important;
-
+	border-radius: 5px;
 	outline: none !important;
 }
 .active .tabs {
@@ -149,6 +158,7 @@ body {
 .nav-item:hover {
 	border: none !important;
 	outline: none !important;
+	border-radius: 5px;
 	background: #15181c;
 }
 .cover {
@@ -165,6 +175,11 @@ body {
 	width: 100px;
 }
 
+.tweet-screen-text {
+	font-size: 23px;
+	font-weight: 500;
+}
+
 @media screen and (max-width: 500px) {
 	.cover {
 		height: 20vh;
@@ -172,6 +187,10 @@ body {
 	.editprofile img {
 		margin-top: -13%;
 		width: 80px;
+	}
+	.tweet-screen-text {
+		font-size: 20px;
+		font-weight: 500;
 	}
 }
 
@@ -281,61 +300,4 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-}
-
-/**
-  * Borders
-  *
-  * @author jh3y - jheytompkins.com
-*/
-.borders {
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	height: 40px;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	position: relative;
-	width: 40px;
-}
-.borders:after,
-.borders:before {
-	border: 5px solid white;
-	border-radius: 100%;
-	position: absolute;
-	content: '';
-	display: block;
-}
-.borders:before {
-	border-bottom-color: transparent;
-	border-left-color: transparent;
-	animation: spin 0.75s infinite linear reverse;
-	height: 30px;
-	width: 30px;
-}
-.borders:after {
-	-webkit-animation: spin 0.5s infinite linear;
-	animation: spin 0.5s infinite linear;
-	height: 50px;
-	width: 50px;
-	border-right-color: transparent;
-	border-top-color: transparent;
-}
-
-@-webkit-keyframes spin {
-	to {
-		-webkit-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}
-
-@keyframes spin {
-	to {
-		-webkit-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
 }

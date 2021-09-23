@@ -157,7 +157,7 @@ const EditProfileScreen = ({ history }) => {
 							className=' editprofile  p-3 pb-0 pt-2  '
 							style={{ position: 'relative' }}>
 							<img
-								className='img-fluid rounded-circle '
+								className='  pp rounded-circle '
 								src={profilePhoto}
 								alt='profile'
 								onClick={() => {

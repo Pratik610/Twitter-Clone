@@ -1,35 +1,41 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { USER_LOGOUT } from '../Constants/userConstants.js'
 
 import { useDispatch } from 'react-redux'
-const MobileNav = ({ userInfo }) => {
-	const [nav, setNav] = useState(false)
-
+const MobileNav = ({ userInfo, hide }) => {
 	const dispatch = useDispatch()
+
+	const close = (e) => {
+		const nav = document.getElementById('nav')
+		nav.classList.remove('animate__slideInLeft')
+		nav.classList.add('animate__slideOutLeft')
+	}
+	const open = (e) => {
+		const nav = document.getElementById('nav')
+		nav.classList.remove('animate__slideOutLeft', 'd-none')
+		nav.classList.add('animate__slideInLeft')
+	}
 
 	return (
 		<>
 			<div
+				id='nav'
 				className={
-					nav
-						? 'mobile-side-nav text-light'
-						: 'mobile-side-nav d-none text-light'
+					'mobile-side-nav  text-light animate__animated animate__faster d-none'
 				}>
 				<div
 					className='p-2 d-flex justify-content-between'
 					style={{ borderBottom: '1px solid grey' }}>
-					<h5 className='font-weight-bold'>Account info</h5>
-					<button
-						type='button'
-						className='btn-close  btn-close-white '
-						aria-label='Close'
-						onClick={() => setNav(false)}></button>
+					<h5 className='font-weight-bold mt-1'>Account info</h5>
+					<h2 className='me-2' id='close' onClick={close}>
+						&#10005;
+					</h2>
 				</div>
 
 				<div className='p-3'>
 					<img
-						width='50'
+						width='55'
 						style={{ borderRadius: '50%' }}
 						className='border'
 						src={userInfo.profilePhoto}
@@ -59,26 +65,28 @@ const MobileNav = ({ userInfo }) => {
 				<div style={{ fontSize: '1em' }}>
 					<Link to='/profile' className='text-light text-decoration-none'>
 						<div className='p-3 pt-1 d-flex'>
-							<div>
+							<div className='col-2 text-center'>
 								{' '}
-								<i className='fas fa-user h6'></i>
+								<i className='fas fa-user ' style={{ fontSize: '1.5em' }}></i>
 							</div>
-							<div className='w-100 p-2  pt-0'>Profile</div>
+							<div className='w-100 col-10 ps-2 h5'>Profile</div>
 						</div>
 					</Link>
 					<div className='p-3 pt-1 d-flex'>
-						<div>
+						<div className='col-2 text-center'>
 							{' '}
-							<i className='fas fa-bookmark h6'></i>
+							<i className='fas fa-bookmark ' style={{ fontSize: '1.5em' }}></i>
 						</div>
-						<div className='w-100 p-2  pt-0'>Bookmarks</div>
+						<div className='w-100 col-10 ps-2 h5'>Bookmarks</div>
 					</div>
 					<div className='p-3 pt-1 d-flex'>
-						<div>
+						<div className='col-2 text-center'>
 							{' '}
-							<i className='fas fa-newspaper h6'></i>
+							<i
+								className='fas fa-newspaper '
+								style={{ fontSize: '1.5em' }}></i>
 						</div>
-						<div className='w-100 p-2 pt-0'>News</div>
+						<div className='w-100 col-10 ps-2  h5'>News</div>
 					</div>
 					<div
 						className='p-3 pt-1 d-flex mt-5'
@@ -88,11 +96,12 @@ const MobileNav = ({ userInfo }) => {
 								type: USER_LOGOUT,
 							})
 						}}>
-						<div>
-							{' '}
-							<i className='fas fa-sign-out-alt h6'></i>
+						<div className='col-2 text-center'>
+							<i
+								className='fas   fa-sign-out-alt '
+								style={{ fontSize: '1.5em' }}></i>
 						</div>
-						<div className='w-100 p-2  pt-0'>Logout</div>
+						<div className='w-100 col-10 ps-2  h5 '>Logout</div>
 					</div>
 				</div>
 			</div>
@@ -100,23 +109,23 @@ const MobileNav = ({ userInfo }) => {
 			{/* ............................. */}
 
 			{userInfo && (
-				<div
-					className='d-flex justify-content-between p-3 pt-2 pb-2 '
-					style={{ borderBottom: '1px solid grey' }}>
+				<div className='d-flex justify-content-between tweets  p-3 pt-2 pb-2 '>
 					<div className=''>
 						<img
 							width='25'
 							style={{ borderRadius: '50%' }}
-							className='border'
+							className=' img-fluid'
 							src={userInfo.profilePhoto}
 							alt='profile'
-							onClick={() => setNav(true)}
+							onClick={open}
 						/>
 					</div>
 					<div className=' '>
-						<i
-							className='fab   fa-twitter '
-							style={{ fontSize: '25px', color: '#1A91DA' }}></i>
+						<Link className='text-decoration-none ' to={'/'}>
+							<i
+								className='fab   fa-twitter '
+								style={{ fontSize: '25px', color: '#1A91DA' }}></i>
+						</Link>
 					</div>
 					<div className=' '>
 						<i
@@ -126,32 +135,37 @@ const MobileNav = ({ userInfo }) => {
 				</div>
 			)}
 
-			<div className='mobile-tweet-btn'>
-				<i
-					className='fas fa-pencil-alt'
-					data-bs-toggle='modal'
-					data-bs-target='#exampleModal'
-					style={{ zIndex: '3' }}></i>
-			</div>
+			{!hide && (
+				<div className='mobile-tweet-btn'>
+					<i
+						className='fas fa-pencil-alt'
+						data-bs-toggle='modal'
+						data-bs-target='#exampleModal'
+						style={{ zIndex: '3' }}></i>
+				</div>
+			)}
 
-			<div
-				className='d-flex bottom-nav  fixed-bottom justify-content-between text-light p-3 pt-1 pb-1 '
-				style={{ borderBottom: '1px solid grey' }}>
-				<div className=''>
-					<Link to='/' className='text-light text-decoration-none'>
-						<i className='fas fa-home p-2 h3    text-center '></i>
-					</Link>
+			{!hide && (
+				<div
+					id='bottom-nav'
+					className='d-flex bottom-nav  fixed-bottom justify-content-between text-light p-3 pt-1 pb-1 '
+					style={{ borderBottom: '1px solid grey' }}>
+					<div className=''>
+						<Link to='/' className='text-light text-decoration-none'>
+							<i className='fas fa-home p-2 h3    text-center '></i>
+						</Link>
+					</div>
+					<div className=''>
+						<Link to='/search' className='text-light text-decoration-none'>
+							{' '}
+							<i className='fas fa-search p-2 h3    text-center'></i>
+						</Link>
+					</div>
+					<div className=''>
+						<i className='fas fa-envelope p-2 h3    text-center '></i>
+					</div>
 				</div>
-				<div className=''>
-					<Link to='/search' className='text-light text-decoration-none'>
-						{' '}
-						<i className='fas fa-search p-2 h3    text-center'></i>
-					</Link>
-				</div>
-				<div className=''>
-					<i className='fas fa-envelope p-2 h3    text-center '></i>
-				</div>
-			</div>
+			)}
 		</>
 	)
 }

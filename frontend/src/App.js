@@ -6,16 +6,20 @@ import EditProfileScreen from './Screens/EditProfileScreen'
 import SignupScreen from './Screens/SignupScreen'
 import LoginScreen from './Screens/LoginScreen'
 import SearchScreen from './Screens/SearchScreen'
+import TweetScreen from './Screens/TweetScreen'
+import BookmarkScreen from './Screens/BookmarkScreen'
 function App() {
 	return (
 		<Router>
 			<Route path='/' exact component={HomeScreen} />
 			<Route path='/profile' component={ProfileScreen} />
 			<Route path='/:id' component={UserProfileScreen} />
+			<Route path='/tweet/:id' component={TweetScreen} />
 			<Route path='/editprofile' component={EditProfileScreen} />
 			<Route path='/signup' exact component={SignupScreen} />
 			<Route path='/login' exact component={LoginScreen} />
 			<Route path='/search' exact component={SearchScreen} />
+			<Route path='/bookmarks' exact component={BookmarkScreen} />
 		</Router>
 	)
 }
