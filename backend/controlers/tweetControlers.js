@@ -52,10 +52,14 @@ export const getUserTweets = asyncHandler(async (req, res) => {
 // req / route -  GET
 // access - private
 export const getFollowingUsersTweets = asyncHandler(async (req, res) => {
-	const tweets = await Tweet.find({ user: req.user.following }).sort({
+	req.user.following.push(req.user._id)
+	const tweets = await Tweet.find({
+		user: req.user.following,
+	}).sort({
 		createdAt: -1,
 	})
 	let userList = []
+
 	for (let index = 0; index < tweets.length; index++) {
 		userList.push(tweets[index].user)
 	}
@@ -203,7 +207,7 @@ export const unbookmarkTweet = asyncHandler(async (req, res) => {
 // req / route -  POST , /api/tweet/liked
 // access - private
 export const likedTweets = asyncHandler(async (req, res) => {
-	const tweets = await Tweet.find({ likes: req.user._id }).sort({
+	const tweets = await Tweet.find({ likes: req.body.id }).sort({
 		createdAt: -1,
 	})
 
@@ -226,9 +230,7 @@ export const likedTweets = asyncHandler(async (req, res) => {
 // req / route -  POST , /api/tweet/retweeted
 // access - private
 export const retweetedTweets = asyncHandler(async (req, res) => {
-	const tweets = await Tweet.find({ retweets: req.user._id }).sort({
-		createdAt: -1,
-	})
+	const tweets = await Tweet.find({ retweets: req.body.id })
 
 	let userList = []
 	for (let index = 0; index < tweets.length; index++) {

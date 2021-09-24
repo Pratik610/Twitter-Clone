@@ -73,9 +73,16 @@ const TweetModal = ({ userInfo }) => {
 								<div className='col-10 ps-3 '>
 									<textarea
 										value={text}
+										id='tweet-modal'
 										onChange={(e) => setText(e.target.value)}
 										className='w-100 mt-2 mobile-text-area'
-										placeholder='Whats happening?'></textarea>
+										rows={1}
+										placeholder='Whats happening?'
+										onInput={(e) => {
+											const textarea = document.querySelector('#tweet-modal')
+											textarea.style.height = 'auto'
+											textarea.style.height = textarea.scrollHeight + 'px'
+										}}></textarea>
 								</div>
 							</div>
 							<hr className='bg-light w-100' />

@@ -10,6 +10,7 @@ import FullScreenLoader from '../Components/FullScreenLoader'
 import { USER_LOGOUT } from '../Constants/userConstants.js'
 import { TWEET_CREATE_RESET } from '../Constants/tweetConstants.js'
 import { useSelector, useDispatch } from 'react-redux'
+import Header from '../Components/Header'
 import {
 	tweetCreate,
 	followingTweets,
@@ -34,6 +35,9 @@ const HomeScreen = ({ history }) => {
 	const tweetFollowing = useSelector((state) => state.tweetFollowing)
 	const { loading, followingTweet } = tweetFollowing
 
+	const tweetCreateState = useSelector((state) => state.tweetCreate)
+	const { tweet: tweetCreated } = tweetCreateState
+
 	const tweetLike = useSelector((state) => state.tweetLike)
 	const { liked } = tweetLike
 	const tweetUnlike = useSelector((state) => state.tweetUnlike)
@@ -57,7 +61,18 @@ const HomeScreen = ({ history }) => {
 			dispatch(getLoginUserInfo(userId._id))
 			dispatch(followingTweets())
 		}
-	}, [userId, history, dispatch, liked, unliked, ret, unret, bTweet, unbTweet])
+	}, [
+		userId,
+		history,
+		dispatch,
+		liked,
+		unliked,
+		ret,
+		unret,
+		bTweet,
+		unbTweet,
+		tweetCreated,
+	])
 
 	const [text, setText] = useState('')
 	const [image, setImage] = useState('')
@@ -113,6 +128,7 @@ const HomeScreen = ({ history }) => {
 	return (
 		<>
 			{homeLoading && <FullScreenLoader />}
+			<Header title='Home' />
 			<div className='container '>
 				{/* modal  */}
 
@@ -169,7 +185,7 @@ const HomeScreen = ({ history }) => {
 							<div className='d-flex d-none d-md-flex'>
 								<div className=' col-2'>
 									<img
-										className='dp d-block mx-auto mt-2'
+										className='dp d-block mx-auto mt-3'
 										src={userInfo.profilePhoto}
 										alt='profile'
 									/>
@@ -178,11 +194,16 @@ const HomeScreen = ({ history }) => {
 									<form onSubmit={tweet}>
 										<textarea
 											value={text}
+											id='main-tweet'
 											onChange={(e) => setText(e.target.value)}
-											className='w-100 '
-											placeholder='Whats happening?'></textarea>
-
-										<hr className='bg-light w-100' />
+											className='w-100 border-bottom pb-3 mb-2 '
+											placeholder='Whats happening?'
+											rows={1}
+											onInput={(e) => {
+												const textarea = document.querySelector('#main-tweet')
+												textarea.style.height = 'auto'
+												textarea.style.height = textarea.scrollHeight + 'px'
+											}}></textarea>
 
 										<div className='d-flex justify-content-between'>
 											<div className='form-group d-flex  w-50 p-2'>
@@ -317,7 +338,9 @@ const HomeScreen = ({ history }) => {
 																dispatch(retweet(tweet._id))
 															}}></i>
 													)}{' '}
-													{tweet.retweets.length}
+													<small className='ps-1'>
+														{tweet.retweets.length}
+													</small>
 												</div>
 												<div className='col-3'>
 													{tweet.likes.find((id) => {
@@ -335,7 +358,7 @@ const HomeScreen = ({ history }) => {
 																dispatch(likeTweet(tweet._id))
 															}}></i>
 													)}{' '}
-													{tweet.likes.length}
+													<small className='ps-1'>{tweet.likes.length}</small>
 												</div>
 												<div className='col-3'>
 													{tweet.bookmark.find((id) => {

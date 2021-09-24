@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../Actions/userAction.js'
 import FullScreenLoader from '../Components/FullScreenLoader.js'
 import AlertBox from '../Components/AlertBox.js'
+import Header from '../Components/Header.js'
 
 const LoginScreen = ({ history }) => {
 	const [email, setEmail] = useState('')
@@ -26,6 +27,7 @@ const LoginScreen = ({ history }) => {
 
 	return (
 		<>
+			<Header title='Login' />
 			{loading && <FullScreenLoader />}
 			<div className=''>
 				<div className='container  '>

@@ -34,22 +34,23 @@ const MobileNav = ({ userInfo, hide }) => {
 				</div>
 
 				<div className='p-3'>
-					<img
-						width='55'
-						style={{ borderRadius: '50%' }}
-						className='border'
-						src={userInfo.profilePhoto}
-						alt='profile'
-					/>
-					<h6 className='mt-2 mb-0 pb-0'>
-						<span style={{ fontWeight: 'bold' }}> {userInfo.name}</span>
+					<Link className='text-decoration-none text-light' to={'/profile'}>
+						<img
+							width='55'
+							style={{ borderRadius: '50%' }}
+							src={userInfo.profilePhoto}
+							alt='profile'
+						/>
+						<h6 className='mt-2 mb-0 pb-0'>
+							<span style={{ fontWeight: 'bold' }}> {userInfo.name}</span>
 
-						<span
-							className='text-muted d-block pt-0'
-							style={{ fontSize: '13px' }}>
-							{userInfo.atTheRate}
-						</span>
-					</h6>
+							<span
+								className='text-muted d-block pt-0'
+								style={{ fontSize: '13px' }}>
+								{userInfo.atTheRate}
+							</span>
+						</h6>
+					</Link>
 
 					<br />
 					<span>
@@ -72,13 +73,17 @@ const MobileNav = ({ userInfo, hide }) => {
 							<div className='w-100 col-10 ps-2 h5'>Profile</div>
 						</div>
 					</Link>
-					<div className='p-3 pt-1 d-flex'>
-						<div className='col-2 text-center'>
-							{' '}
-							<i className='fas fa-bookmark ' style={{ fontSize: '1.5em' }}></i>
+					<Link to='/bookmarks' className='text-light text-decoration-none'>
+						<div className='p-3 pt-1 d-flex'>
+							<div className='col-2 text-center'>
+								{' '}
+								<i
+									className='fas fa-bookmark '
+									style={{ fontSize: '1.5em' }}></i>
+							</div>
+							<div className='w-100 col-10 ps-2 h5'>Bookmarks</div>
 						</div>
-						<div className='w-100 col-10 ps-2 h5'>Bookmarks</div>
-					</div>
+					</Link>
 					<div className='p-3 pt-1 d-flex'>
 						<div className='col-2 text-center'>
 							{' '}

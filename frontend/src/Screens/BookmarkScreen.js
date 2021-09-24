@@ -6,6 +6,7 @@ import MobileNav from '../Components/MobileNav'
 import TweetModal from '../Components/TweetModal'
 import Loader from '../Components/Loader.js'
 import FullScreenLoader from '../Components/FullScreenLoader'
+import Header from '../Components/Header'
 import { USER_LOGOUT } from '../Constants/userConstants.js'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -65,6 +66,8 @@ const BookmarkScreen = ({ history }) => {
 
 	return (
 		<>
+			{' '}
+			<Header title='Bookmarks' />
 			{homeLoading && <FullScreenLoader />}
 			<div className='container '>
 				{/* modal  */}

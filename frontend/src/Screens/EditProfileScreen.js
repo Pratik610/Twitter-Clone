@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from '../Actions/userAction.js'
 import AlertBox from '../Components/AlertBox'
 import Sidenav from '../Components/Sidenav.js'
+import Header from '../Components/Header.js'
 import axios from 'axios'
 
 import { Link } from 'react-router-dom'
@@ -83,158 +84,161 @@ const EditProfileScreen = ({ history }) => {
 	}
 
 	return (
-		<div className='container '>
-			<div className='row'>
-				<div className='d-none d-md-block col-md-2 col-lg-3 p-md-2 navigation '>
-					<Sidenav className='roboto' userInfo={userInfo} />
-				</div>
-				<div
-					className='col-12 col-md-10 col-lg-6 p-0 tweets-section'
-					style={{ height: '100vh' }}>
-					{error && <AlertBox error={error} />}
-
-					<div className='d-md-none d-flex ps-3  '>
-						<div className='pt-1'>
-							<Link to={'/profile'}>
-								<i
-									className='fas fa-arrow-left text-light'
-									style={{ fontSize: '1.8em' }}></i>
-							</Link>
-						</div>
-						<div className='ms-4 text-light mt-1'>
-							<h3 style={{ fontWeight: 'bold' }}>Edit profile</h3>
-						</div>
+		<>
+			<Header title='Edit Profile' />
+			<div className='container '>
+				<div className='row'>
+					<div className='d-none d-md-block col-md-2 col-lg-3 p-md-2 navigation '>
+						<Sidenav className='roboto' userInfo={userInfo} />
 					</div>
+					<div
+						className='col-12 col-md-10 col-lg-6 p-0 tweets-section'
+						style={{ height: '100vh' }}>
+						{error && <AlertBox error={error} />}
 
-					<form onSubmit={update} className='p-1'>
-						<div className=' p-2 home d-none d-md-block'>
-							<h5
-								className='roboto font-weight-bold text-light'
-								style={{ fontSize: '20px' }}>
-								Edit Profile
-							</h5>
+						<div className='d-md-none d-flex ps-3  '>
+							<div className='pt-1'>
+								<Link to={'/profile'}>
+									<i
+										className='fas fa-arrow-left text-light'
+										style={{ fontSize: '1.8em' }}></i>
+								</Link>
+							</div>
+							<div className='ms-4 text-light mt-1'>
+								<h3 style={{ fontWeight: 'bold' }}>Edit profile</h3>
+							</div>
 						</div>
-						<div
-							className='cover pt-1 edit-cover  text-light'
-							style={{
-								backgroundImage: `url(uploads/${
-									coverPhoto.split('uploads')[1]
-								})`,
-								backgroundRepeat: 'no-repeat',
-								backgroundPosition: 'center-top',
-								backgroundSize: 'cover',
-							}}>
-							{imageLoading && <Loader />}
 
-							<div className='edit-option w-100 h-100 '>
-								<div
-									className='d-flex w-75 justify-content-center'
-									style={{
-										position: 'relative',
-										top: '50%',
-										left: '50%',
-										transform: 'translate(-50%,-50%)',
-									}}>
-									<label htmlFor='cover' className=' col-3 '>
-										<i
-											className='fas fa-camera h3'
-											style={{ cursor: 'pointer' }}></i>
-									</label>
-									<input
-										type='file'
-										hidden
-										accept=' image/jpeg, image/png'
-										className='form-control-file '
-										onChange={uploadCoverPhotoHandler}
-										id='cover'
-									/>
-									<i class='fas fa-times h3'></i>
+						<form onSubmit={update} className='p-1'>
+							<div className=' p-2 home d-none d-md-block'>
+								<h5
+									className='roboto font-weight-bold text-light'
+									style={{ fontSize: '20px' }}>
+									Edit Profile
+								</h5>
+							</div>
+							<div
+								className='cover pt-1 edit-cover  text-light'
+								style={{
+									backgroundImage: `url(uploads/${
+										coverPhoto.split('uploads')[1]
+									})`,
+									backgroundRepeat: 'no-repeat',
+									backgroundPosition: 'center-top',
+									backgroundSize: 'cover',
+								}}>
+								{imageLoading && <Loader />}
+
+								<div className='edit-option w-100 h-100 '>
+									<div
+										className='d-flex w-75 justify-content-center'
+										style={{
+											position: 'relative',
+											top: '50%',
+											left: '50%',
+											transform: 'translate(-50%,-50%)',
+										}}>
+										<label htmlFor='cover' className=' col-3 '>
+											<i
+												className='fas fa-camera h3'
+												style={{ cursor: 'pointer' }}></i>
+										</label>
+										<input
+											type='file'
+											hidden
+											accept=' image/jpeg, image/png'
+											className='form-control-file '
+											onChange={uploadCoverPhotoHandler}
+											id='cover'
+										/>
+										<i class='fas fa-times h3'></i>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div
-							className=' editprofile  p-3 pb-0 pt-2  '
-							style={{ position: 'relative' }}>
-							<img
-								className='  pp rounded-circle '
-								src={profilePhoto}
-								alt='profile'
-								onClick={() => {
-									document.getElementById('profile-file').click()
-								}}
-								htmlFor='profile-file'
-								style={{ zIndex: '3' }}
-							/>
-
-							<input
-								type='file'
-								hidden
-								accept=' image/jpeg, image/png'
-								className='form-control-file '
-								onChange={uploadProfilePhotoHandler}
-								id='profile-file'
-							/>
-						</div>
-
-						<div className='p-md-2 p-1'>
-							<div className='form-floating mt-2 mb-3 text-light'>
-								<input
-									type='text'
-									required
-									autoComplete='none'
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									className='form-control'
-									id='floatingInput1'
-									placeholder='name'
+							<div
+								className=' editprofile  p-3 pb-0 pt-2  '
+								style={{ position: 'relative' }}>
+								<img
+									className='  pp rounded-circle '
+									src={profilePhoto}
+									alt='profile'
+									onClick={() => {
+										document.getElementById('profile-file').click()
+									}}
+									htmlFor='profile-file'
+									style={{ zIndex: '3' }}
 								/>
-								<label htmlFor='floatingInput1'>Name</label>
-							</div>
 
-							<div className='form-floating mb-3 text-light'>
-								<textarea
-									autoComplete='none'
-									value={bio}
-									onChange={(e) => setBio(e.target.value)}
-									className='form-control text-light border'
-									id='floatingInput1'
-									placeholder='name'
-									style={{ height: '100px', background: 'black' }}></textarea>
-								<label htmlFor='floatingInput1'>Bio</label>
-							</div>
-
-							<div className='form-floating mt-4 mb-3 text-light'>
 								<input
-									type='url'
-									autoComplete='none'
-									value={website}
-									onChange={(e) => setWebsite(e.target.value)}
-									className='form-control'
-									id='floatingInput1'
-									placeholder='name'
+									type='file'
+									hidden
+									accept=' image/jpeg, image/png'
+									className='form-control-file '
+									onChange={uploadProfilePhotoHandler}
+									id='profile-file'
 								/>
-								<label htmlFor='floatingInput1'>Website</label>
 							</div>
 
-							<button
-								style={{
-									width: '50%',
-									backgroundColor: ' #1da1f2',
-									borderRadius: '20px',
-								}}
-								type='submit'
-								className=' border-0 mt-4 mx-auto d-block p-3 pt-2 pb-2 text-light  font-weight-bold  btn  text-center'>
-								Save
-							</button>
-						</div>
-					</form>
-				</div>
-				<div className='d-none d-lg-block col-lg-3  news'>
-					<News className='news' />
+							<div className='p-md-2 p-1'>
+								<div className='form-floating mt-2 mb-3 text-light'>
+									<input
+										type='text'
+										required
+										autoComplete='none'
+										value={name}
+										onChange={(e) => setName(e.target.value)}
+										className='form-control'
+										id='floatingInput1'
+										placeholder='name'
+									/>
+									<label htmlFor='floatingInput1'>Name</label>
+								</div>
+
+								<div className='form-floating mb-3 text-light'>
+									<textarea
+										autoComplete='none'
+										value={bio}
+										onChange={(e) => setBio(e.target.value)}
+										className='form-control text-light border'
+										id='floatingInput1'
+										placeholder='name'
+										style={{ height: '100px', background: 'black' }}></textarea>
+									<label htmlFor='floatingInput1'>Bio</label>
+								</div>
+
+								<div className='form-floating mt-4 mb-3 text-light'>
+									<input
+										type='url'
+										autoComplete='none'
+										value={website}
+										onChange={(e) => setWebsite(e.target.value)}
+										className='form-control'
+										id='floatingInput1'
+										placeholder='name'
+									/>
+									<label htmlFor='floatingInput1'>Website</label>
+								</div>
+
+								<button
+									style={{
+										width: '50%',
+										backgroundColor: ' #1da1f2',
+										borderRadius: '20px',
+									}}
+									type='submit'
+									className=' border-0 mt-4 mx-auto d-block p-3 pt-2 pb-2 text-light  font-weight-bold  btn  text-center'>
+									Save
+								</button>
+							</div>
+						</form>
+					</div>
+					<div className='d-none d-lg-block col-lg-3  news'>
+						<News className='news' />
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 

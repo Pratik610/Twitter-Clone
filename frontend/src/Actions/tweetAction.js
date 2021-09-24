@@ -353,7 +353,7 @@ export const unbookmark = (id) => async (dispatch, getState) => {
 	}
 }
 
-export const getLikedTweets = () => async (dispatch, getState) => {
+export const getLikedTweets = (id) => async (dispatch, getState) => {
 	try {
 		dispatch({
 			type: LIKED_TWEETS_REQUEST,
@@ -369,7 +369,7 @@ export const getLikedTweets = () => async (dispatch, getState) => {
 			},
 		}
 
-		const { data } = await axios.get('/api/tweet/liked', config)
+		const { data } = await axios.post('/api/tweet/liked', { id: id }, config)
 
 		dispatch({
 			type: LIKED_TWEETS_SUCCESS,
@@ -386,7 +386,7 @@ export const getLikedTweets = () => async (dispatch, getState) => {
 	}
 }
 
-export const getRetweetedTweets = () => async (dispatch, getState) => {
+export const getRetweetedTweets = (id) => async (dispatch, getState) => {
 	try {
 		dispatch({
 			type: RETWEETED_TWEETS_REQUEST,
@@ -402,7 +402,11 @@ export const getRetweetedTweets = () => async (dispatch, getState) => {
 			},
 		}
 
-		const { data } = await axios.get('/api/tweet/retweeted', config)
+		const { data } = await axios.post(
+			'/api/tweet/retweeted',
+			{ id: id },
+			config
+		)
 
 		dispatch({
 			type: RETWEETED_TWEETS_SUCCESS,
