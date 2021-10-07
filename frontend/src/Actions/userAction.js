@@ -25,10 +25,13 @@ import {
 	USER_UNFOLLOW_FAIL,
 	USER_UNFOLLOW_REQUEST,
 	USER_UNFOLLOW_SUCCESS,
+	CHECK_USERNAME_REQUEST,
+	CHECK_USERNAME_SUCCESS,
+	CHECK_USERNAME_FAIL,
 } from '../Constants/userConstants.js'
 
 export const registerUser =
-	(name, email, password, DOB) => async (dispatch) => {
+	(name, email, password, username, DOB) => async (dispatch) => {
 		try {
 			dispatch({
 				type: USER_CREATE_REQUEST,
@@ -41,7 +44,7 @@ export const registerUser =
 
 			const { data } = await axios.post(
 				'/api/users/signup',
-				{ name, email, password, DOB, atTheRate: `@${name}` },
+				{ name, email, password, DOB, atTheRate: `@${username}` },
 				config
 			)
 			data &&
@@ -59,6 +62,37 @@ export const registerUser =
 			})
 		}
 	}
+export const checkUserName = (username) => async (dispatch) => {
+	try {
+		dispatch({
+			type: CHECK_USERNAME_REQUEST,
+		})
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+
+		const { data } = await axios.post(
+			'/api/users/username',
+			{ atTheRate: `@${username}` },
+			config
+		)
+		data &&
+			dispatch({
+				type: CHECK_USERNAME_SUCCESS,
+				payload: data,
+			})
+	} catch (error) {
+		dispatch({
+			type: CHECK_USERNAME_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
 
 export const loginUser = (email, password) => async (dispatch) => {
 	try {

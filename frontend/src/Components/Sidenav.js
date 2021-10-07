@@ -70,6 +70,7 @@ const Sidenav = ({ userInfo }) => {
 
 				<div
 					className='col-12 d-flex mt-5 hotlinks'
+					style={{ cursor: 'pointer' }}
 					onClick={() => {
 						localStorage.removeItem('userId')
 						dispatch({

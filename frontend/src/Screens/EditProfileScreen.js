@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateUser } from '../Actions/userAction.js'
+import { updateUser ,getLoginUserInfo } from '../Actions/userAction.js'
 import AlertBox from '../Components/AlertBox'
 import Sidenav from '../Components/Sidenav.js'
 import Header from '../Components/Header.js'
@@ -21,9 +21,11 @@ const EditProfileScreen = ({ history }) => {
 
 	const userUpdate = useSelector((state) => state.userUpdate)
 	const { error, updatedUser } = userUpdate
+	
 	const [name, setName] = useState(userInfo && userInfo.name)
 	const [bio, setBio] = useState(userInfo && userInfo.bio)
 	const [website, setWebsite] = useState(userInfo && userInfo.website)
+
 	const [profilePhoto, setProfilePhoto] = useState(
 		userInfo && userInfo.profilePhoto
 	)
@@ -43,6 +45,16 @@ const EditProfileScreen = ({ history }) => {
 		if (!userId) {
 			history.push('/login')
 		}
+		if(!userInfo){
+			dispatch(getLoginUserInfo(userId._id))
+			
+		}
+		if(userInfo){
+			setName(userInfo.name)
+			setBio(userInfo.bio)
+			setWebsite(userInfo.website)
+		}
+		
 	}, [dispatch, history, userId, updatedUser, userInfo, coverPhoto])
 
 	const uploadCoverPhotoHandler = async (e) => {
@@ -85,8 +97,9 @@ const EditProfileScreen = ({ history }) => {
 
 	return (
 		<>
+		
 			<Header title='Edit Profile' />
-			<div className='container '>
+				{userInfo && 	<div className='container '>
 				<div className='row'>
 					<div className='d-none d-md-block col-md-2 col-lg-3 p-md-2 navigation '>
 						<Sidenav className='roboto' userInfo={userInfo} />
@@ -121,7 +134,7 @@ const EditProfileScreen = ({ history }) => {
 								className='cover pt-1 edit-cover  text-light'
 								style={{
 									backgroundImage: `url(uploads/${
-										coverPhoto.split('uploads')[1]
+										userInfo.coverPhoto.split('uploads')[1]
 									})`,
 									backgroundRepeat: 'no-repeat',
 									backgroundPosition: 'center-top',
@@ -160,14 +173,14 @@ const EditProfileScreen = ({ history }) => {
 								className=' editprofile  p-3 pb-0 pt-2  '
 								style={{ position: 'relative' }}>
 								<img
-									className='  pp rounded-circle '
-									src={profilePhoto}
+									className='profilePhoto rounded-circle '
+									src={userInfo.profilePhoto}
 									alt='profile'
 									onClick={() => {
 										document.getElementById('profile-file').click()
 									}}
 									htmlFor='profile-file'
-									style={{ zIndex: '3' }}
+									style={{ zIndex: '3' , border:'1px solid #211e1d'}}
 								/>
 
 								<input
@@ -237,7 +250,8 @@ const EditProfileScreen = ({ history }) => {
 						<News className='news' />
 					</div>
 				</div>
-			</div>
+			</div> }
+		
 		</>
 	)
 }

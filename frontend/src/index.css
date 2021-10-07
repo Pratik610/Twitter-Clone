@@ -66,15 +66,30 @@ body {
 	border-bottom: 1px solid grey;
 	border-top: none;
 }
+
+.dp-lg {
+
+	width: 70px;
+	height: 70px;
+	border: 1px solid #211e1d;
+	border-radius: 50%;
+}
 .dp {
-	width: 3rem;
-	/* width: 50px;
-	height: 50px; */
+
+	width: 50px;
+	height: 50px;
+	border: 1px solid #211e1d;
+	border-radius: 50%;
+}
+.dp-sm{
+	width: 30px;
+	height: 30px;
+	border: 1px solid #211e1d;
 
 	border-radius: 50%;
 }
 .tweets-section {
-	border-left: 1px solid grey;
+	border-left: 1px solid rgb(47, 51, 54);
 }
 .border-bottom {
 	border-bottom: 1px solid grey !important;
@@ -149,7 +164,10 @@ body {
 }
 
 /* ........................Profile........... */
-
+.profilePhoto{
+	max-width: 75px;
+	max-height:80px
+}
 .active {
 	background-color: none !important;
 	color: #1da1f2 !important;
@@ -176,7 +194,7 @@ body {
 .editprofile img {
 	margin-top: -10%;
 	border: 4px solid black;
-	width: 100px;
+	
 }
 
 .tweet-screen-text {
@@ -237,7 +255,7 @@ body {
 	}
 }
 
-/* mobile Side Nav */
+/* mobile Side i */
 
 .mobile-side-nav {
 	position: absolute;

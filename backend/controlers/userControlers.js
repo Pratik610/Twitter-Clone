@@ -28,6 +28,21 @@ const createUser = asyncHandler(async (req, res) => {
 	}
 })
 
+const checkUsername = asyncHandler(async (req, res) => {
+	const { atTheRate } = req.body
+	console.log(atTheRate)
+	const user = await User.findOne({ atTheRate })
+
+	if (user) {
+		res.status(201).json({
+			user,
+		})
+	} else {
+		res.status(400)
+		throw new Error('User Allready Exists')
+	}
+})
+
 const loginUser = asyncHandler(async (req, res) => {
 	const { email, password } = req.body
 	const user = await User.findOne({ email, password }).select('-password')
@@ -152,4 +167,5 @@ export {
 	followUser,
 	unfollowUser,
 	getLoginUser,
+	checkUsername,
 }

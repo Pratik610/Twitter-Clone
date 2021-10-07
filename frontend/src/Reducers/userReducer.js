@@ -26,6 +26,9 @@ import {
 	USER_UNFOLLOW_SUCCESS,
 	USER_INFO_SUCCESS,
 	USER_UPDATE_RESET,
+	CHECK_USERNAME_REQUEST,
+	CHECK_USERNAME_SUCCESS,
+	CHECK_USERNAME_FAIL,
 } from '../Constants/userConstants.js'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -66,6 +69,19 @@ export const userLoginInfoReducer = (state = {}, action) => {
 			return { loading: false, error: action.payload }
 		case USER_LOGOUT:
 			return {}
+		default:
+			return state
+	}
+}
+
+export const checkUsernameReducer = (state = {}, action) => {
+	switch (action.type) {
+		case CHECK_USERNAME_REQUEST:
+			return { loading: true, username: null }
+		case CHECK_USERNAME_SUCCESS:
+			return { loading: false, username: action.payload }
+		case CHECK_USERNAME_FAIL:
+			return { loading: false, error: action.payload }
 		default:
 			return state
 	}

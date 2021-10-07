@@ -15,11 +15,13 @@ const SearchScreen = () => {
 		dispatch(getLoginUserInfo(userId._id))
 	}, [userId._id, dispatch])
 	return (
-		<div className=' news'>
+		<div className=' news '>
 			{userInfo && (
 				<>
 					<MobileNav userInfo={userInfo} />
-					<News />
+					<div className='p-2'>
+						<News />
+					</div>
 				</>
 			)}
 		</div>

@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import FullScreenLoader from '../Components/FullScreenLoader.js'
 import AlertBox from '../Components/AlertBox.js'
-import { registerUser } from '../Actions/userAction.js'
+import Header from '../Components/Header.js'
+import { registerUser, checkUserName } from '../Actions/userAction.js'
 import { Link } from 'react-router-dom'
 
 const SignupScreen = ({ history }) => {
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+	const [username, setUsername] = useState('')
 	const [day, setDay] = useState('')
 	const [month, setMonth] = useState('')
 	const [year, setYear] = useState('')
@@ -17,6 +19,9 @@ const SignupScreen = ({ history }) => {
 
 	const userRegister = useSelector((state) => state.userRegister)
 	const { register, loading, error } = userRegister
+
+	const checkUsername = useSelector((state) => state.checkUsername)
+	const { username: un } = checkUsername
 
 	useEffect(() => {
 		if (register) {
@@ -29,7 +34,7 @@ const SignupScreen = ({ history }) => {
 		e.preventDefault()
 		const DOB = day + ' ' + month + ' ' + year
 
-		dispatch(registerUser(name, email, password, DOB))
+		dispatch(registerUser(name, email, password, username, DOB))
 	}
 
 	// date format code
@@ -54,8 +59,14 @@ const SignupScreen = ({ history }) => {
 		years.push(startYear++)
 	}
 
+	const getUserName = (e) => {
+		setUsername(e.target.value)
+		dispatch(checkUserName(e.target.value))
+	}
+
 	return (
 		<div className='parent'>
+			<Header title='Signup' />
 			{loading && <FullScreenLoader />}
 
 			<div className='container  '>
@@ -111,6 +122,26 @@ const SignupScreen = ({ history }) => {
 								<label htmlFor='floatingInput3'>Password</label>
 							</div>
 
+							<div className='form-floating mb-3'>
+								<input
+									type='text'
+									required
+									autoComplete='current-password'
+									value={username}
+									onChange={getUserName}
+									className={
+										username.length > 5
+											? un
+												? 'form-control is-invalid'
+												: 'form-control is-valid'
+											: 'form-control  '
+									}
+									id='floatingInput3'
+									placeholder='username'
+								/>
+								<label htmlFor='floatingInput3'>@username</label>
+							</div>
+
 							<h6 className='mb-0'>Date of birth</h6>
 							<small className='text-muted mt-0'>
 								{' '}
@@ -119,7 +150,7 @@ const SignupScreen = ({ history }) => {
 							</small>
 
 							<div className='d-flex text-light mt-3'>
-								<div className='col-6'>
+								<div className=' col-5 col-md-6'>
 									<div className='form-floating'>
 										<select
 											required
@@ -138,7 +169,7 @@ const SignupScreen = ({ history }) => {
 										<label htmlFor='floatingSelect1'>Month</label>
 									</div>
 								</div>
-								<div className='col-3'>
+								<div className=' col-3 col-md-3'>
 									<div className='form-floating'>
 										<select
 											className='form-select'
@@ -157,7 +188,7 @@ const SignupScreen = ({ history }) => {
 										<label htmlFor='floatingSelect2'>Day</label>
 									</div>
 								</div>
-								<div className='col-3'>
+								<div className='col-4 col-md-3'>
 									<div className='form-floating'>
 										<select
 											className='form-select'
@@ -181,8 +212,8 @@ const SignupScreen = ({ history }) => {
 							<div className=' mt-md-3 mt-5  '>
 								<button
 									type='submit'
-									className=' tweet-btn btn d-block w-md-75 signup-btn  mx-auto mt-4 pt-2 pb-2'>
-									<h6 style={{ fontSize: '1.1em' }}>Next</h6>
+									className=' tweet-btn btn d-block roboto w-md-75 signup-btn  mx-auto mt-4 pt-1 pb-1'>
+									<h6 style={{ fontSize: '1.1em' }}>Register</h6>
 								</button>
 								<p className='text-center mt-3'>
 									{' '}

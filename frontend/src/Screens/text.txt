@@ -23,8 +23,6 @@ import {
 	retweet,
 	unlikeTweet,
 	likeTweet,
-	unbookmark,
-	bookmark,
 } from '../Actions/tweetAction.js'
 
 const UserProfileScreen = ({ history, match }) => {
@@ -56,12 +54,6 @@ const UserProfileScreen = ({ history, match }) => {
 	const tweetUnretweet = useSelector((state) => state.tweetUnretweet)
 	const { unretweet: unret } = tweetUnretweet
 
-	const bookmarkTweet = useSelector((state) => state.bookmarkTweet)
-	const { bookmarkedTweet: bTweet } = bookmarkTweet
-
-	const unbookmarkTweet = useSelector((state) => state.unbookmarkTweet)
-	const { unbookmarkTweet: unbTweet } = unbookmarkTweet
-
 	const userFollow = useSelector((state) => state.userFollow)
 	const { follow } = userFollow
 
@@ -77,19 +69,23 @@ const UserProfileScreen = ({ history, match }) => {
 	}
 
 	useEffect(() => {
-		if (!userId) {
+		if(!userId){
 			history.push('/')
 		}
 		if (userId) {
-			dispatch(getLoginUserInfo(userId._id))
-			dispatch(tweetsOfUser(match.params.id))
+
+		if(!userInfo){
+				dispatch(getLoginUserInfo(userId._id))
+		}
+			
 			dispatch(getUserById(match.params.id))
+			dispatch(tweetsOfUser(match.params.id))
+			
 			dispatch(getLikedTweets(match.params.id))
 			dispatch(getRetweetedTweets(match.params.id))
 		}
 	}, [
 		dispatch,
-		history,
 		match.params.id,
 		follow,
 		unfollow,
@@ -98,8 +94,6 @@ const UserProfileScreen = ({ history, match }) => {
 		liked,
 		ret,
 		unret,
-		bTweet,
-		unbTweet,
 	])
 
 	if (retweetedTweets) {
@@ -122,17 +116,17 @@ const UserProfileScreen = ({ history, match }) => {
 		}
 	}
 
-	return (
+return (
 		<>
 			{homeLoading && <FullScreenLoader />}
 			<div className='container'>
-				{userData && <TweetModal userInfo={userData} updatetweet={tweets} />}
+				{userInfo && <TweetModal userInfo={userInfo} updatetweet={tweets} />}
 
 				{userData && (
 					<div className='row'>
 						{loading && <FullScreenLoader />}
 						<div className='d-none d-md-block col-md-2 col-lg-3 p-md-2 navigation '>
-							<Sidenav className='roboto' userInfo={userData} />
+							<Sidenav className='roboto' userInfo={userInfo} />
 						</div>
 						{/* ......................... */}
 						<div
@@ -157,25 +151,26 @@ const UserProfileScreen = ({ history, match }) => {
 
 								<div
 									className='cover pt-1 '
-									// style={{
-									// 		backgroundImage: `url(uploads/${
-									// 			userInfo.coverPhoto.split('uploads')[1]
-									// 		})`,
-									// 		backgroundRepeat: 'no-repeat',
-									// 		backgroundPosition: 'center-top',
-									// 		backgroundSize: 'cover',
-									// 	}}
-								>
-									<img
+									style={{
+										// backgroundImage: `url(uploads/${
+										// 	userData.coverPhoto.split('uploads')[1]
+										// })`,
+										backgroundImage: `url(/uploads/defaultBackgreound.png)`,
+										backgroundRepeat: 'no-repeat',
+										backgroundPosition: 'center-top',
+										backgroundSize: 'cover',
+									}}
+									>
+									{/* <img
 										className='w-100  '
 										src={userData.coverPhoto}
 										alt='profile'
-										style={{ height: 'fill' }}
-									/>
+										style={{  maxWidth: '100%',height: 'auto' }}
+									/> */}
 								</div>
 								<div className=' editprofile p-3 pb-0 pt-2'>
 									<img
-										className='img-fluid profilePhoto rounded-circle '
+										className='img-fluid rounded-circle '
 										src={userData.profilePhoto}
 										alt='profile'
 									/>
@@ -239,7 +234,7 @@ const UserProfileScreen = ({ history, match }) => {
 									className='nav   text-center text-light pb-0 nav-tabs d-flex '
 									id='myTab'
 									role='tablist'>
-									<li className='nav-item  pt-2 pb-0 col-4' role='presentation'>
+									<li className='nav-item  p-2 pb-0 col-4' role='presentation'>
 										<div
 											className='active  pb-0'
 											id='home-tab'
@@ -258,7 +253,7 @@ const UserProfileScreen = ({ history, match }) => {
 											</p>
 										</div>
 									</li>
-									<li className='nav-item pt-2 pb-0 col-4' role='presentation'>
+									<li className='nav-item p-2  pb-0 col-4' role='presentation'>
 										<div
 											id='profile-tab'
 											data-bs-toggle='tab'
@@ -269,11 +264,11 @@ const UserProfileScreen = ({ history, match }) => {
 											<p
 												style={{ fontSize: '0.8em ', fontWeight: '900' }}
 												className='pb-3 tabs mb-0'>
-												Retweets
+												Tweets & replies
 											</p>
 										</div>
 									</li>
-									<li className='nav-item pt-2 pb-0 col-4' role='presentation'>
+									<li className='nav-item p-2 pb-0 col-4' role='presentation'>
 										<div
 											id='contact-tab'
 											data-bs-toggle='tab'
@@ -323,67 +318,10 @@ const UserProfileScreen = ({ history, match }) => {
 															{userData.atTheRate}
 														</span>
 														<p>{t.text}</p>
-														<div className='d-flex mt-2 text-muted '>
-															<div className='col-3'>
-																<Link
-																	to={`/tweet/${t._id}`}
-																	className='text-decoration-none text-muted'>
-																	<i className='far fa-comment  '></i>
-																</Link>
-															</div>
-															<div className='col-3'>
-																{t.retweets.find((id) => {
-																	return id === userInfo._id
-																}) ? (
-																	<i
-																		className='fas fa-retweet  text-success'
-																		onClick={(e) => {
-																			dispatch(unretweet(t._id))
-																		}}></i>
-																) : (
-																	<i
-																		className='fas fa-retweet '
-																		onClick={(e) => {
-																			dispatch(retweet(t._id))
-																		}}></i>
-																)}{' '}
-																{t.retweets.length}
-															</div>
-															<div className='col-3'>
-																{t.likes.find((id) => {
-																	return id === userInfo._id
-																}) ? (
-																	<i
-																		className={`fas fa-heart  text-danger  like-btn `}
-																		onClick={(e) => {
-																			dispatch(unlikeTweet(t._id))
-																		}}></i>
-																) : (
-																	<i
-																		className={`far fa-heart     like-btn `}
-																		onClick={(e) => {
-																			dispatch(likeTweet(t._id))
-																		}}></i>
-																)}{' '}
-																{t.likes.length}
-															</div>
-															<div className='col-3'>
-																{t.bookmark.find((id) => {
-																	return id === userId._id
-																}) ? (
-																	<i
-																		className={`fas fa-bookmark `}
-																		onClick={(e) => {
-																			dispatch(unbookmark(t._id))
-																		}}></i>
-																) : (
-																	<i
-																		className={`far fa-bookmark `}
-																		onClick={(e) => {
-																			dispatch(bookmark(t._id))
-																		}}></i>
-																)}{' '}
-															</div>
+														<div className='d-flex text-muted '>
+															<i className='far fa-comment col-3 '></i>
+															<i className='fas fa-retweet col-3'></i>
+															<i className='far fa-heart col-3'></i>
 														</div>
 													</div>
 												</div>
@@ -400,7 +338,7 @@ const UserProfileScreen = ({ history, match }) => {
 													className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 													key={tweet._id}>
 													<div className='p-2 col-2 col-md-1'>
-														<Link to={`/user/${tweet.userdata._id}`}>
+														<Link to={`/${tweet.userdata._id}`}>
 															<img
 																className='dp d-block mx-auto '
 																src={tweet.userdata.profilePhoto}
@@ -410,7 +348,7 @@ const UserProfileScreen = ({ history, match }) => {
 													</div>
 													<div className='col-10 col-md-11 pt-2 text-light p-1  ps-2 ps-md-4'>
 														<Link
-															to={`/user/${tweet.userdata._id}`}
+															to={`/${tweet.userdata._id}`}
 															className='text-decoration-none text-light'>
 															<h6 className='mb-0 roboto d-inline-block pe-1'>
 																{tweet.userdata.name}
@@ -444,11 +382,9 @@ const UserProfileScreen = ({ history, match }) => {
 														</Link>
 
 														<div className='d-flex mt-2 text-muted '>
-															<Link
-																to={`/tweet/${tweet._id}`}
-																className='text-decoration-none text-muted'>
+															<div className='col-3'>
 																<i className='far fa-comment  '></i>
-															</Link>
+															</div>
 															<div className='col-3'>
 																{tweet.retweets.find((id) => {
 																	return id === userInfo._id
@@ -486,21 +422,7 @@ const UserProfileScreen = ({ history, match }) => {
 																{tweet.likes.length}
 															</div>
 															<div className='col-3'>
-																{tweet.bookmark.find((id) => {
-																	return id === userId._id
-																}) ? (
-																	<i
-																		className={`fas fa-bookmark `}
-																		onClick={(e) => {
-																			dispatch(unbookmark(tweet._id))
-																		}}></i>
-																) : (
-																	<i
-																		className={`far fa-bookmark `}
-																		onClick={(e) => {
-																			dispatch(bookmark(tweet._id))
-																		}}></i>
-																)}{' '}
+																<i className='far fa-bookmark'></i>
 															</div>
 														</div>
 													</div>
@@ -524,7 +446,7 @@ const UserProfileScreen = ({ history, match }) => {
 													className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 													key={tweet._id}>
 													<div className='p-2 col-2 col-md-1'>
-														<Link to={`/user/${tweet.userdata._id}`}>
+														<Link to={`/${tweet.userdata._id}`}>
 															<img
 																className='dp d-block mx-auto '
 																src={tweet.userdata.profilePhoto}
@@ -534,7 +456,7 @@ const UserProfileScreen = ({ history, match }) => {
 													</div>
 													<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
 														<Link
-															to={`/user/${tweet.userdata._id}`}
+															to={`/${tweet.userdata._id}`}
 															className='text-decoration-none text-light'>
 															<h6 className='mb-0 roboto d-inline-block pe-1'>
 																{tweet.userdata.name}
@@ -567,11 +489,9 @@ const UserProfileScreen = ({ history, match }) => {
 															)}
 														</Link>
 														<div className='d-flex mt-2 text-muted '>
-															<Link
-																to={`/tweet/${tweet._id}`}
-																className='text-decoration-none text-muted'>
+															<div className='col-3'>
 																<i className='far fa-comment  '></i>
-															</Link>
+															</div>
 															<div className='col-3'>
 																{tweet.retweets.find((id) => {
 																	return id === userData._id
@@ -609,21 +529,7 @@ const UserProfileScreen = ({ history, match }) => {
 																{tweet.likes.length}
 															</div>
 															<div className='col-3'>
-																{tweet.bookmark.find((id) => {
-																	return id === userId._id
-																}) ? (
-																	<i
-																		className={`fas fa-bookmark `}
-																		onClick={(e) => {
-																			dispatch(unbookmark(tweet._id))
-																		}}></i>
-																) : (
-																	<i
-																		className={`far fa-bookmark `}
-																		onClick={(e) => {
-																			dispatch(bookmark(tweet._id))
-																		}}></i>
-																)}{' '}
+																<i className='far fa-bookmark'></i>
 															</div>
 														</div>
 													</div>

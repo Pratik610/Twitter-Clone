@@ -40,7 +40,7 @@ const SearchBox = () => {
 			{searchResult && (
 				<div className='results '>
 					{searchResult.map((user) => (
-						<Link to={`/${user._id}`} className='text-decoration-none'>
+						<Link to={`/user/${user._id}`} className='text-decoration-none'>
 							<div className='d-flex tweets pb-3 pt-2'>
 								<div className='p-2 col-2'>
 									<img

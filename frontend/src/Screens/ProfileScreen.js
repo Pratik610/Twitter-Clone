@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+
 import News from '../Components/News'
 import Sidenav from '../Components/Sidenav'
 import { useSelector, useDispatch } from 'react-redux'
@@ -13,6 +14,8 @@ import {
 	unretweet,
 	retweet,
 	likeTweet,
+	bookmark,
+	unbookmark,
 	unlikeTweet,
 	getRetweetedTweets,
 } from '../Actions/tweetAction.js'
@@ -34,7 +37,7 @@ const ProfileScreen = ({ history }) => {
 	const { likedTweets, loading: loadingLiked, error: errorLiked } = tweetLiked
 
 	const tweetRetweeted = useSelector((state) => state.tweetRetweeted)
-	const { retweetedTweets } = tweetRetweeted
+	const { retweetedTweets, error: errorRetweeted } = tweetRetweeted
 
 	const tweetLike = useSelector((state) => state.tweetLike)
 	const { liked } = tweetLike
@@ -46,19 +49,28 @@ const ProfileScreen = ({ history }) => {
 	const tweetUnretweet = useSelector((state) => state.tweetUnretweet)
 	const { unretweet: unret } = tweetUnretweet
 
+	const bookmarkTweet = useSelector((state) => state.bookmarkTweet)
+	const { bookmarkedTweet: bTweet } = bookmarkTweet
+
+	const unbookmarkTweet = useSelector((state) => state.unbookmarkTweet)
+	const { unbookmarkTweet: unbTweet } = unbookmarkTweet
+
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		if (!userId) {
 			history.push('/login')
 		}
-		if (userId._id) {
-			dispatch(getLoginUserInfo(userId._id))
-			dispatch(tweetsOfUser(userId._id))
-			dispatch(getLikedTweets(userId._id))
-			dispatch(getRetweetedTweets(userId._id))
+
+		if (userId) {
+			if (userId._id) {
+				dispatch(getLoginUserInfo(userId._id))
+				dispatch(tweetsOfUser(userId._id))
+				dispatch(getLikedTweets(userId._id))
+				dispatch(getRetweetedTweets(userId._id))
+			}
 		}
-	}, [history, dispatch, userId, unliked, liked, ret, unret])
+	}, [history, dispatch, userId, unliked, liked, ret, unret, bTweet, unbTweet])
 
 	if (retweetedTweets) {
 		for (let i = 0; i < retweetedTweets.tweets.length; i++) {
@@ -84,6 +96,9 @@ const ProfileScreen = ({ history }) => {
 		<>
 			{loading && <FullScreenLoader />}
 			<div className='container'>
+				{errorLiked && dispatch(getLikedTweets(userId._id))}
+				{errorRetweeted && dispatch(getRetweetedTweets(userId._id))}
+
 				{userInfo && <TweetModal userInfo={userInfo} updatetweet={tweets} />}
 
 				{userInfo && (
@@ -134,7 +149,7 @@ const ProfileScreen = ({ history }) => {
 									</div>
 									<div className=' editprofile p-3 pb-0 pt-2'>
 										<img
-											className='img-fluid  rounded-circle '
+											className='img-fluid profilePhoto  rounded-circle '
 											src={userInfo.profilePhoto}
 											alt='profile'
 										/>
@@ -225,7 +240,7 @@ const ProfileScreen = ({ history }) => {
 												<p
 													style={{ fontSize: '0.8em ', fontWeight: '900' }}
 													className='pb-3 tabs mb-0'>
-													Tweets & replies
+													Retweets
 												</p>
 											</div>
 										</li>
@@ -304,7 +319,11 @@ const ProfileScreen = ({ history }) => {
 															)}
 															<div className='d-flex mt-2 text-muted '>
 																<div className='col-3'>
-																	<i className='far fa-comment  '></i>
+																	<Link
+																		to={`/tweet/${tweet._id}`}
+																		className='text-decoration-none text-muted'>
+																		<i className='far fa-comment  '></i>
+																	</Link>
 																</div>
 																<div className='col-3'>
 																	{tweet.retweets.find((id) => {
@@ -343,13 +362,30 @@ const ProfileScreen = ({ history }) => {
 																	{tweet.likes.length}
 																</div>
 																<div className='col-3'>
-																	<i className='far fa-bookmark'></i>
+																	{tweet.bookmark.find((id) => {
+																		return id === userId._id
+																	}) ? (
+																		<i
+																			className={`fas fa-bookmark `}
+																			onClick={(e) => {
+																				dispatch(unbookmark(tweet._id))
+																			}}></i>
+																	) : (
+																		<i
+																			className={`far fa-bookmark `}
+																			onClick={(e) => {
+																				dispatch(bookmark(tweet._id))
+																			}}></i>
+																	)}{' '}
 																</div>
 															</div>
 														</div>
 													</div>
 												))}
 										</div>
+
+										{/* retweeted Tweets start */}
+
 										<div
 											className='tab-pane fade'
 											id='profile'
@@ -361,7 +397,7 @@ const ProfileScreen = ({ history }) => {
 														className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 														key={tweet._id}>
 														<div className='p-2 col-2 col-md-1'>
-															<Link to={`/${tweet.userdata._id}`}>
+															<Link to={`/user/${tweet.userdata._id}`}>
 																<img
 																	className='dp d-block mx-auto '
 																	src={tweet.userdata.profilePhoto}
@@ -371,7 +407,7 @@ const ProfileScreen = ({ history }) => {
 														</div>
 														<div className='col-10 col-md-11 pt-2 text-light p-1  ps-2 ps-md-4'>
 															<Link
-																to={`/${tweet.userdata._id}`}
+																to={`/user/${tweet.userdata._id}`}
 																className='text-decoration-none text-light'>
 																<h6 className='mb-0 roboto d-inline-block pe-1'>
 																	{tweet.userdata.name}
@@ -406,7 +442,11 @@ const ProfileScreen = ({ history }) => {
 
 															<div className='d-flex mt-2 text-muted '>
 																<div className='col-3'>
-																	<i className='far fa-comment  '></i>
+																	<Link
+																		to={`/tweet/${tweet._id}`}
+																		className='text-decoration-none text-muted'>
+																		<i className='far fa-comment  '></i>
+																	</Link>
 																</div>
 																<div className='col-3'>
 																	{tweet.retweets.find((id) => {
@@ -445,13 +485,30 @@ const ProfileScreen = ({ history }) => {
 																	{tweet.likes.length}
 																</div>
 																<div className='col-3'>
-																	<i className='far fa-bookmark'></i>
+																	{tweet.bookmark.find((id) => {
+																		return id === userId._id
+																	}) ? (
+																		<i
+																			className={`fas fa-bookmark `}
+																			onClick={(e) => {
+																				dispatch(unbookmark(tweet._id))
+																			}}></i>
+																	) : (
+																		<i
+																			className={`far fa-bookmark `}
+																			onClick={(e) => {
+																				dispatch(bookmark(tweet._id))
+																			}}></i>
+																	)}{' '}
 																</div>
 															</div>
 														</div>
 													</div>
 												))}
 										</div>
+
+										{/* Liked tweets start */}
+
 										<div
 											className='tab-pane fade'
 											id='contact'
@@ -469,7 +526,7 @@ const ProfileScreen = ({ history }) => {
 														className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
 														key={tweet._id}>
 														<div className='p-2 col-2 col-md-1'>
-															<Link to={`/${tweet.userdata._id}`}>
+															<Link to={`/user/${tweet.userdata._id}`}>
 																<img
 																	className='dp d-block mx-auto '
 																	src={tweet.userdata.profilePhoto}
@@ -479,7 +536,7 @@ const ProfileScreen = ({ history }) => {
 														</div>
 														<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
 															<Link
-																to={`/${tweet.userdata._id}`}
+																to={`/user/${tweet.userdata._id}`}
 																className='text-decoration-none text-light'>
 																<h6 className='mb-0 roboto d-inline-block pe-1'>
 																	{tweet.userdata.name}
@@ -513,7 +570,11 @@ const ProfileScreen = ({ history }) => {
 															</Link>
 															<div className='d-flex mt-2 text-muted '>
 																<div className='col-3'>
-																	<i className='far fa-comment  '></i>
+																	<Link
+																		to={`/tweet/${tweet._id}`}
+																		className='text-decoration-none text-muted'>
+																		<i className='far fa-comment  '></i>
+																	</Link>
 																</div>
 																<div className='col-3'>
 																	{tweet.retweets.find((id) => {
@@ -552,7 +613,21 @@ const ProfileScreen = ({ history }) => {
 																	{tweet.likes.length}
 																</div>
 																<div className='col-3'>
-																	<i className='far fa-bookmark'></i>
+																	{tweet.bookmark.find((id) => {
+																		return id === userId._id
+																	}) ? (
+																		<i
+																			className={`fas fa-bookmark `}
+																			onClick={(e) => {
+																				dispatch(unbookmark(tweet._id))
+																			}}></i>
+																	) : (
+																		<i
+																			className={`far fa-bookmark `}
+																			onClick={(e) => {
+																				dispatch(bookmark(tweet._id))
+																			}}></i>
+																	)}{' '}
 																</div>
 															</div>
 														</div>

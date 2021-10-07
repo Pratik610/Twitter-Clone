@@ -13,7 +13,7 @@ function App() {
 		<Router>
 			<Route path='/' exact component={HomeScreen} />
 			<Route path='/profile' component={ProfileScreen} />
-			<Route path='/:id' component={UserProfileScreen} />
+			<Route path='/user/:id' component={UserProfileScreen} />
 			<Route path='/tweet/:id' component={TweetScreen} />
 			<Route path='/editprofile' component={EditProfileScreen} />
 			<Route path='/signup' exact component={SignupScreen} />

@@ -33,15 +33,15 @@ const MobileNav = ({ userInfo, hide }) => {
 					</h2>
 				</div>
 
-				<div className='p-3'>
+				<div className='p-3 '>
 					<Link className='text-decoration-none text-light' to={'/profile'}>
 						<img
-							width='55'
+							className='dp-lg'
 							style={{ borderRadius: '50%' }}
 							src={userInfo.profilePhoto}
 							alt='profile'
 						/>
-						<h6 className='mt-2 mb-0 pb-0'>
+						<h6 className='mt-2 mb-3 pb-0'>
 							<span style={{ fontWeight: 'bold' }}> {userInfo.name}</span>
 
 							<span
@@ -52,7 +52,6 @@ const MobileNav = ({ userInfo, hide }) => {
 						</h6>
 					</Link>
 
-					<br />
 					<span>
 						{userInfo.following.length}{' '}
 						<span className='text-muted'> Following </span>
@@ -63,25 +62,25 @@ const MobileNav = ({ userInfo, hide }) => {
 					</span>
 				</div>
 				{/* links */}
-				<div style={{ fontSize: '1em' }}>
-					<Link to='/profile' className='text-light text-decoration-none'>
-						<div className='p-3 pt-1 d-flex'>
+				<div style={{ fontSize: '1em', fontWeight: '900' }}>
+					<Link to='/profile' className='text-light  text-decoration-none'>
+						<div className='p-3 pt-1 d-flex mb-1'>
 							<div className='col-2 text-center'>
 								{' '}
-								<i className='fas fa-user ' style={{ fontSize: '1.5em' }}></i>
+								<i className='fas fa-user ' style={{ fontSize: '1.2em' }}></i>
 							</div>
-							<div className='w-100 col-10 ps-2 h5'>Profile</div>
+							<div className='w-100 col-10 ps-2  '>Profile</div>
 						</div>
 					</Link>
 					<Link to='/bookmarks' className='text-light text-decoration-none'>
-						<div className='p-3 pt-1 d-flex'>
+						<div className='p-3 pt-1 d-flex mb-1'>
 							<div className='col-2 text-center'>
 								{' '}
 								<i
 									className='fas fa-bookmark '
-									style={{ fontSize: '1.5em' }}></i>
+									style={{ fontSize: '1.2em' }}></i>
 							</div>
-							<div className='w-100 col-10 ps-2 h5'>Bookmarks</div>
+							<div className='w-100 col-10 ps-2 '>Bookmarks</div>
 						</div>
 					</Link>
 					<div className='p-3 pt-1 d-flex'>
@@ -89,12 +88,13 @@ const MobileNav = ({ userInfo, hide }) => {
 							{' '}
 							<i
 								className='fas fa-newspaper '
-								style={{ fontSize: '1.5em' }}></i>
+								style={{ fontSize: '1.2em' }}></i>
 						</div>
-						<div className='w-100 col-10 ps-2  h5'>News</div>
+						<div className='w-100 col-10 ps-2  '>News</div>
 					</div>
 					<div
 						className='p-3 pt-1 d-flex mt-5'
+						style={{ cursor: 'pointer' }}
 						onClick={() => {
 							localStorage.removeItem('userId')
 							dispatch({
@@ -104,9 +104,9 @@ const MobileNav = ({ userInfo, hide }) => {
 						<div className='col-2 text-center'>
 							<i
 								className='fas   fa-sign-out-alt '
-								style={{ fontSize: '1.5em' }}></i>
+								style={{ fontSize: '1.2em' }}></i>
 						</div>
-						<div className='w-100 col-10 ps-2  h5 '>Logout</div>
+						<div className='w-100 col-10 ps-2  '>Logout</div>
 					</div>
 				</div>
 			</div>
@@ -117,9 +117,8 @@ const MobileNav = ({ userInfo, hide }) => {
 				<div className='d-flex justify-content-between tweets  p-3 pt-2 pb-2 '>
 					<div className=''>
 						<img
-							width='25'
 							style={{ borderRadius: '50%' }}
-							className=' img-fluid'
+							className='dp-sm  img-fluid'
 							src={userInfo.profilePhoto}
 							alt='profile'
 							onClick={open}

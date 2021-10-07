@@ -192,21 +192,29 @@ const TweetScreen = ({ history, match }) => {
 									<div className='ps-md-3 pe-md-3  ps-1 pe-1'>
 										<div className='d-flex mt-1  '>
 											<div className='p-2 col-2 col-md-1'>
-												<img
-													className='dp d-block mx-auto '
-													src={tweetData.user.profilePhoto}
-													alt='profile'
-												/>
+												<Link
+													className='text-decoration-none text-light'
+													to={`/user/${tweetData.user._id}`}>
+													<img
+														className='dp d-block mx-auto '
+														src={tweetData.user.profilePhoto}
+														alt='profile'
+													/>
+												</Link>
 											</div>
 											<div className='col-10 col-md-11 pt-2 text-light p-1 ps-3'>
-												<h6 className='mb-0 roboto mt-1 pe-1'>
-													{tweetData.user.name}
-												</h6>
-												<span
-													className='text-muted'
-													style={{ fontSize: '0.8em' }}>
-													{tweetData.user.atTheRate}
-												</span>
+												<Link
+													className='text-decoration-none text-light'
+													to={`/user/${tweetData.user._id}`}>
+													<h6 className='mb-0 roboto mt-1 pe-1'>
+														{tweetData.user.name}
+													</h6>
+													<span
+														className='text-muted'
+														style={{ fontSize: '0.8em' }}>
+														{tweetData.user.atTheRate}
+													</span>
+												</Link>
 											</div>
 										</div>
 										<div className='p-3 pt-1 text-light border-bottom'>
@@ -365,7 +373,7 @@ const TweetScreen = ({ history, match }) => {
 													<div className='p-2 col-2'>
 														<Link
 															className='text-decoration-none text-light'
-															to={`/${userInfo._id}`}>
+															to={`/user/${userInfo._id}`}>
 															<img
 																className='dp d-block mx-auto '
 																src={userInfo.profilePhoto}
@@ -376,7 +384,7 @@ const TweetScreen = ({ history, match }) => {
 													<div className='col-10 pt-2 text-light p-1'>
 														<Link
 															className='text-decoration-none text-light'
-															to={`/${userInfo._id}`}>
+															to={`/user/${userInfo._id}`}>
 															<h6 className='mb-0 roboto d-inline-block pe-1'>
 																{userInfo.name}
 																{/* <span className='text-muted'> - 19m</span> */}
@@ -409,7 +417,11 @@ const TweetScreen = ({ history, match }) => {
 														</Link>
 														<div className='d-flex mt-1 text-muted '>
 															<div className='col-3'>
-																<i className='far fa-comment  '></i>
+																<Link
+																	to={`/tweet/${tweet._id}`}
+																	className='text-decoration-none text-muted'>
+																	<i className='far fa-comment  '></i>
+																</Link>
 															</div>
 															<div className='col-3'>
 																{tweet.retweets.find((id) => {
