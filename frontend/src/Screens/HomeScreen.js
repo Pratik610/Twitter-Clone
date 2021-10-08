@@ -266,9 +266,11 @@ const HomeScreen = ({ history }) => {
 							{followingTweet &&
 								followingTweet.tweets.map((tweet) => (
 									<div
-										className='d-flex mt-1 tweets pb-2 pe-md-3 ps-md-3'
+										className=' row mt-1 tweets pb-2 pe-md-3 ps-md-3'
 										key={tweet._id}>
-										<div className='p-2 col-2 col-md-1 '>
+										{tweet.type === 'reply' && <div className='col-md-11 col-12 offset-2 ps-2 ps-md-4 offset-md-1 text-muted' style={{fontSize:'0.8em'}}><span>Replying to</span></div>}
+										
+										<div className='p-2 col-2 col-md-1  '>
 											<Link
 												className='text-decoration-none text-light'
 												to={`/user/${tweet.userdata._id}`}>
@@ -281,6 +283,7 @@ const HomeScreen = ({ history }) => {
 											</Link>
 										</div>
 										<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
+										
 											<Link
 												className='text-decoration-none text-light'
 												to={`/user/${tweet.userdata._id}`}>
@@ -297,12 +300,13 @@ const HomeScreen = ({ history }) => {
 											<Link
 												className='text-decoration-none text-light'
 												to={`/tweet/${tweet._id}`}>
+												{/* {tweet.text.length > 50 ? tweet.text.split('') : ''} */}
 												<p
 													style={{
-														overflowWrap: 'break-word',
+														overflowWrap: 'ellipsis',
 														whiteSpace: 'pre',
 													}}
-													className='mb-0 mt-0  '>
+													className={'mb-0 mt-0'}>
 													{tweet.text}
 												</p>
 												{tweet.image && (

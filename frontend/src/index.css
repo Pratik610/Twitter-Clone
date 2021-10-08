@@ -90,6 +90,7 @@ body {
 }
 .tweets-section {
 	border-left: 1px solid rgb(47, 51, 54);
+	overflow-x: hidden;
 }
 .border-bottom {
 	border-bottom: 1px solid grey !important;
@@ -126,6 +127,10 @@ body {
 
 .tweets {
 	border-bottom: 1px solid rgb(47, 51, 54);
+}
+
+.long{
+	height: 20px;
 }
 
 .gif {
@@ -165,8 +170,10 @@ body {
 
 /* ........................Profile........... */
 .profilePhoto{
-	max-width: 75px;
-	max-height:80px
+	min-width: 74px;
+	max-width: 75px !important;
+	max-height:75px;
+	
 }
 .active {
 	background-color: none !important;

@@ -35,12 +35,24 @@ export const createTweet = asyncHandler(async (req, res) => {
 // access - public
 export const getUserTweets = asyncHandler(async (req, res) => {
 	const { id } = req.params
-
+	let temp = []
 	const tweets = await Tweet.find({ user: id }).sort({ createdAt: -1 })
+	for (let i = 0; i < tweets.length; i++) {
+		temp.push(tweets[i].refTweetId)
+	}
+	const main = await Tweet.find({ _id: temp })
+
+	for (let i = 0; i < main.length; i++) {
+		temp.push(main[i].user)
+	}
+
+	const users = await User.find({ _id: temp })
 
 	if (tweets) {
 		res.status(201).json({
 			tweets,
+			main,
+			users,
 		})
 	} else {
 		res.status(400)

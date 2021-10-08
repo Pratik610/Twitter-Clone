@@ -31,7 +31,7 @@ const ProfileScreen = ({ history }) => {
 	const { userInfo, loading, error } = userLoginInfo
 
 	const userTweets = useSelector((state) => state.userTweets)
-	const { tweets, loading: tweetsLoading, error: tweetsError } = userTweets
+	const { tweets, loading: tweetsLoading } = userTweets
 
 	const tweetLiked = useSelector((state) => state.tweetLiked)
 	const { likedTweets, loading: loadingLiked, error: errorLiked } = tweetLiked
@@ -112,7 +112,10 @@ const ProfileScreen = ({ history }) => {
 							{/* ......................... */}
 							<div
 								className='col-12 col-md-10 col-lg-6 p-0 tweets-section '
-								style={{ height: '100vh', overflowY: 'scroll' }}>
+								style={{
+									height: '100vh',
+									overflowY: 'scroll',
+								}}>
 								{/*Profile */}
 								{error && <AlertBox error={error} />}
 
@@ -274,113 +277,260 @@ const ProfileScreen = ({ history }) => {
 													<Loader style={{ marginLeft: '-10%' }} />
 												</div>
 											)}
-											{tweetsError && (
-												<button onClick={dispatch(tweetsOfUser(userId._id))}>
-													reload
-												</button>
-											)}
+											{/* {tweetsError && dispatch(tweetsOfUser(userId._id))} */}
 											{tweets &&
-												tweets.tweets.map((tweet) => (
-													<div
-														className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
-														key={tweet._id}>
-														<div className='p-2 col-2 col-md-1'>
-															<img
-																className='dp d-block mx-auto '
-																src={userInfo.profilePhoto}
-																alt='profile'
-															/>
-														</div>
-														<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
-															<h6 className='mb-0 roboto d-inline-block pe-1'>
-																{userInfo.name}
-																{/* <span className='text-muted'> - 19m</span> */}
-															</h6>
-															<span
-																className='text-muted'
-																style={{ fontSize: '0.8em' }}>
-																{userInfo.atTheRate}
-															</span>
-															<p
-																style={{ overflowWrap: 'break-word' }}
-																className='mb-0'>
-																{tweet.text}
-															</p>
-															{tweet.image && (
-																<div className='img-output mb-2    w-100  '>
-																	<img
-																		id='output'
-																		style={{ width: '90%', height: '90%' }}
-																		src={tweet.image}
-																		alt='img'
-																		className='img-fluid  d-block  rounded'
-																	/>
-																</div>
-															)}
-															<div className='d-flex mt-2 text-muted '>
-																<div className='col-3'>
-																	<Link
-																		to={`/tweet/${tweet._id}`}
-																		className='text-decoration-none text-muted'>
-																		<i className='far fa-comment  '></i>
-																	</Link>
-																</div>
-																<div className='col-3'>
-																	{tweet.retweets.find((id) => {
-																		return id === userId._id
-																	}) ? (
-																		<i
-																			className='fas fa-retweet  text-success'
-																			onClick={(e) => {
-																				dispatch(unretweet(tweet._id))
-																			}}></i>
-																	) : (
-																		<i
-																			className='fas fa-retweet '
-																			onClick={(e) => {
-																				dispatch(retweet(tweet._id))
-																			}}></i>
-																	)}{' '}
-																	{tweet.retweets.length}
-																</div>
-																<div className='col-3'>
-																	{tweet.likes.find((id) => {
-																		return id === userId._id
-																	}) ? (
-																		<i
-																			className={`fas fa-heart  text-danger  like-btn `}
-																			onClick={(e) => {
-																				dispatch(unlikeTweet(tweet._id))
-																			}}></i>
-																	) : (
-																		<i
-																			className={`far fa-heart     like-btn `}
-																			onClick={(e) => {
-																				dispatch(likeTweet(tweet._id))
-																			}}></i>
-																	)}{' '}
-																	{tweet.likes.length}
-																</div>
-																<div className='col-3'>
-																	{tweet.bookmark.find((id) => {
-																		return id === userId._id
-																	}) ? (
-																		<i
-																			className={`fas fa-bookmark `}
-																			onClick={(e) => {
-																				dispatch(unbookmark(tweet._id))
-																			}}></i>
-																	) : (
-																		<i
-																			className={`far fa-bookmark `}
-																			onClick={(e) => {
-																				dispatch(bookmark(tweet._id))
-																			}}></i>
-																	)}{' '}
+												tweets.tweets.map((tweet, i) => (
+													<>
+														{/* {tweet.type === 'reply' &&
+															tweets.main[i]._id === tweet.refTweetId &&
+															tweets.main[i].user === tweets.users[i]._id && (
+																<span>Replying to {tweets.users[i].name}</span>
+															)} */}
+														<div
+															className='row  tweets pb-3 pt-2 pe-md-3 ps-md-3'
+															key={tweet._id}>
+															{tweet.type === 'reply' &&
+																tweets.main.map((mainTweet, i) => (
+																	<>
+																		{mainTweet._id === tweet.refTweetId &&
+																			tweets.users.map((user) => (
+																				<>
+																					{mainTweet.user === user._id && (
+																						<>
+																							<div className='col-md-1 mb-3 col-2 p-2'>
+																								<img
+																									className='dp d-block mx-auto '
+																									src={user.profilePhoto}
+																									alt='profile'
+																								/>
+																							</div>
+																							<div className='col-10 mb-3 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
+																								<h6 className='mb-0 roboto d-inline-block pe-1'>
+																									{user.name}
+																								</h6>
+																								<span
+																									className='text-muted'
+																									style={{ fontSize: '0.8em' }}>
+																									{userInfo.atTheRate}
+																								</span>
+																								<p
+																									style={{
+																										overflowWrap: 'break-word',
+																									}}
+																									className='mb-0'>
+																									{mainTweet.text}
+																								</p>
+																								{mainTweet.image && (
+																									<div className='img-output mb-2    w-100  '>
+																										<img
+																											id='output'
+																											style={{
+																												width: '90%',
+																												height: '90%',
+																											}}
+																											src={mainTweet.image}
+																											alt='img'
+																											className='img-fluid  d-block  rounded'
+																										/>
+																									</div>
+																								)}
+																								<div className='d-flex mt-2 text-muted '>
+																									<div className='col-3'>
+																										<Link
+																											to={`/tweet/${mainTweet._id}`}
+																											className='text-decoration-none text-muted'>
+																											<i className='far fa-comment  '></i>
+																										</Link>
+																									</div>
+																									<div className='col-3'>
+																										{mainTweet.retweets.find(
+																											(id) => {
+																												return id === userId._id
+																											}
+																										) ? (
+																											<i
+																												className='fas fa-retweet  text-success'
+																												onClick={(e) => {
+																													dispatch(
+																														unretweet(
+																															mainTweet._id
+																														)
+																													)
+																												}}></i>
+																										) : (
+																											<i
+																												className='fas fa-retweet '
+																												onClick={(e) => {
+																													dispatch(
+																														retweet(
+																															mainTweet._id
+																														)
+																													)
+																												}}></i>
+																										)}{' '}
+																										{mainTweet.retweets.length}
+																									</div>
+																									<div className='col-3'>
+																										{mainTweet.likes.find(
+																											(id) => {
+																												return id === userId._id
+																											}
+																										) ? (
+																											<i
+																												className={`fas fa-heart  text-danger  like-btn `}
+																												onClick={(e) => {
+																													dispatch(
+																														unlikeTweet(
+																															mainTweet._id
+																														)
+																													)
+																												}}></i>
+																										) : (
+																											<i
+																												className={`far fa-heart     like-btn `}
+																												onClick={(e) => {
+																													dispatch(
+																														likeTweet(
+																															mainTweet._id
+																														)
+																													)
+																												}}></i>
+																										)}{' '}
+																										{mainTweet.likes.length}
+																									</div>
+																									<div className='col-3'>
+																										{mainTweet.bookmark.find(
+																											(id) => {
+																												return id === userId._id
+																											}
+																										) ? (
+																											<i
+																												className={`fas fa-bookmark `}
+																												onClick={(e) => {
+																													dispatch(
+																														unbookmark(
+																															mainTweet._id
+																														)
+																													)
+																												}}></i>
+																										) : (
+																											<i
+																												className={`far fa-bookmark `}
+																												onClick={(e) => {
+																													dispatch(
+																														bookmark(
+																															mainTweet._id
+																														)
+																													)
+																												}}></i>
+																										)}{' '}
+																									</div>
+																								</div>
+																							</div>
+																						</>
+																					)}
+																				</>
+																			))}
+																	</>
+																))}
+															<div className='p-2 col-2 col-md-1'>
+																<img
+																	className='dp d-block mx-auto '
+																	src={userInfo.profilePhoto}
+																	alt='profile'
+																/>
+															</div>
+															<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
+																<h6 className='mb-0 roboto d-inline-block pe-1'>
+																	{userInfo.name}
+																	{/* <span className='text-muted'> - 19m</span> */}
+																</h6>
+																<span
+																	className='text-muted'
+																	style={{ fontSize: '0.8em' }}>
+																	{userInfo.atTheRate}
+																</span>
+																<p
+																	style={{ overflowWrap: 'break-word' }}
+																	className='mb-0'>
+																	{tweet.text}
+																</p>
+																{tweet.image && (
+																	<div className='img-output mb-2    w-100  '>
+																		<img
+																			id='output'
+																			style={{ width: '90%', height: '90%' }}
+																			src={tweet.image}
+																			alt='img'
+																			className='img-fluid  d-block  rounded'
+																		/>
+																	</div>
+																)}
+																<div className='d-flex mt-2 text-muted '>
+																	<div className='col-3'>
+																		<Link
+																			to={`/tweet/${tweet._id}`}
+																			className='text-decoration-none text-muted'>
+																			<i className='far fa-comment  '></i>
+																		</Link>
+																	</div>
+																	<div className='col-3'>
+																		{tweet.retweets.find((id) => {
+																			return id === userId._id
+																		}) ? (
+																			<i
+																				className='fas fa-retweet  text-success'
+																				onClick={(e) => {
+																					dispatch(unretweet(tweet._id))
+																				}}></i>
+																		) : (
+																			<i
+																				className='fas fa-retweet '
+																				onClick={(e) => {
+																					dispatch(retweet(tweet._id))
+																				}}></i>
+																		)}{' '}
+																		{tweet.retweets.length}
+																	</div>
+																	<div className='col-3'>
+																		{tweet.likes.find((id) => {
+																			return id === userId._id
+																		}) ? (
+																			<i
+																				className={`fas fa-heart  text-danger  like-btn `}
+																				onClick={(e) => {
+																					dispatch(unlikeTweet(tweet._id))
+																				}}></i>
+																		) : (
+																			<i
+																				className={`far fa-heart     like-btn `}
+																				onClick={(e) => {
+																					dispatch(likeTweet(tweet._id))
+																				}}></i>
+																		)}{' '}
+																		{tweet.likes.length}
+																	</div>
+																	<div className='col-3'>
+																		{tweet.bookmark.find((id) => {
+																			return id === userId._id
+																		}) ? (
+																			<i
+																				className={`fas fa-bookmark `}
+																				onClick={(e) => {
+																					dispatch(unbookmark(tweet._id))
+																				}}></i>
+																		) : (
+																			<i
+																				className={`far fa-bookmark `}
+																				onClick={(e) => {
+																					dispatch(bookmark(tweet._id))
+																				}}></i>
+																		)}{' '}
+																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
+													</>
 												))}
 										</div>
 
