@@ -29,6 +29,12 @@ import {
 	CHECK_USERNAME_REQUEST,
 	CHECK_USERNAME_SUCCESS,
 	CHECK_USERNAME_FAIL,
+	GET_FOLLOWING_REQUEST,
+	GET_FOLLOWING_SUCCESS,
+	GET_FOLLOWING_FAIL,
+	GET_FOLLOWERS_REQUEST,
+	GET_FOLLOWERS_SUCCESS,
+	GET_FOLLOWERS_FAIL,
 } from '../Constants/userConstants.js'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -151,6 +157,32 @@ export const userByIdReducer = (state = {}, action) => {
 		case USER_BY_ID_SUCCESS:
 			return { loading: false, userData: action.payload }
 		case USER_BY_ID_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const followingUsersReducer = (state = {}, action) => {
+	switch (action.type) {
+		case GET_FOLLOWING_REQUEST:
+			return { loading: true }
+		case GET_FOLLOWING_SUCCESS:
+			return { loading: false, followingUsers: action.payload }
+		case GET_FOLLOWING_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const followersUsersReducer = (state = {}, action) => {
+	switch (action.type) {
+		case GET_FOLLOWERS_REQUEST:
+			return { loading: true }
+		case GET_FOLLOWERS_SUCCESS:
+			return { loading: false, followers: action.payload }
+		case GET_FOLLOWERS_FAIL:
 			return { loading: false, error: action.payload }
 		default:
 			return state

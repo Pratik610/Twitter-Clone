@@ -10,10 +10,14 @@ import {
 	getLoginUser,
 	unfollowUser,
 	checkUsername,
+	getUserFollowing,
+	getUserFollowers,
 } from '../controlers/userControlers.js'
 const router = express.Router()
 
 router.route('/').post(searchUser)
+router.route('/following').post(getUserFollowing)
+router.route('/followers').post(getUserFollowers)
 router.route('/:id').get(getUserById)
 router.route('/signup').post(createUser)
 router.route('/username').post(checkUsername)

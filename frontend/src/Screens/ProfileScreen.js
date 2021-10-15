@@ -195,8 +195,12 @@ const ProfileScreen = ({ history }) => {
 											{userInfo.createdAt.substring(0, 10)}
 										</p>
 										<span className='text-light'>
-											{userInfo.following.length}{' '}
-											<span className='text-muted'> Following </span>
+											<Link
+												className=' text-muted text-decoration-none'
+												to={'/following'}>
+												{userInfo.following.length}{' '}
+												<span className='text-muted'> Following</span>
+											</Link>{' '}
 										</span>
 										<span className='p-3 text-light'>
 											{userInfo.followers.length}
@@ -281,13 +285,8 @@ const ProfileScreen = ({ history }) => {
 											{tweets &&
 												tweets.tweets.map((tweet, i) => (
 													<>
-														{/* {tweet.type === 'reply' &&
-															tweets.main[i]._id === tweet.refTweetId &&
-															tweets.main[i].user === tweets.users[i]._id && (
-																<span>Replying to {tweets.users[i].name}</span>
-															)} */}
 														<div
-															className='row  tweets pb-3 pt-2 pe-md-3 ps-md-3'
+															className='row ps-3 tweets pb-3 pt-2 pe-md-3 ps-md-3'
 															key={tweet._id}>
 															{tweet.type === 'reply' &&
 																tweets.main.map((mainTweet, i) => (
@@ -297,25 +296,58 @@ const ProfileScreen = ({ history }) => {
 																				<>
 																					{mainTweet.user === user._id && (
 																						<>
-																							<div className='col-md-1 mb-3 col-2 p-2'>
-																								<img
-																									className='dp d-block mx-auto '
-																									src={user.profilePhoto}
-																									alt='profile'
-																								/>
+																							<div
+																								className='col-md-11 col-12 offset-2 ps-2 ps-md-4 offset-md-1 text-muted'
+																								style={{ fontSize: '0.8em' }}>
+																								<span>
+																									Replying to {user.name}
+																								</span>
+																							</div>
+
+																							<div className='col-md-1 mb-3 col-2 p-2 pe-0'>
+																								<Link
+																									className='text-decoration-none text-light'
+																									to={`/user/${user._id}`}>
+																									{' '}
+																									<img
+																										className='dp d-block mx-auto '
+																										src={user.profilePhoto}
+																										alt='profile'
+																									/>
+																									<div
+																										className='line w-100 mx-auto '
+																										style={{
+																											width: '100%',
+																											height: '100%',
+																										}}>
+																										<p
+																											className='text-center mx-auto bg-dark'
+																											style={{
+																												width: '2px',
+																												height: '100%',
+																											}}></p>
+																									</div>
+																								</Link>
 																							</div>
 																							<div className='col-10 mb-3 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
-																								<h6 className='mb-0 roboto d-inline-block pe-1'>
-																									{user.name}
-																								</h6>
-																								<span
-																									className='text-muted'
-																									style={{ fontSize: '0.8em' }}>
-																									{userInfo.atTheRate}
-																								</span>
+																								<Link
+																									className='text-decoration-none text-light'
+																									to={`/user/${user._id}`}>
+																									<h6 className='mb-0 roboto d-inline-block pe-1'>
+																										{user.name}
+																									</h6>
+																									<span
+																										className='text-muted'
+																										style={{
+																											fontSize: '0.8em',
+																										}}>
+																										{userInfo.atTheRate}
+																									</span>
+																								</Link>
 																								<p
 																									style={{
 																										overflowWrap: 'break-word',
+																										whiteSpace: 'pre',
 																									}}
 																									className='mb-0'>
 																									{mainTweet.text}
@@ -544,7 +576,7 @@ const ProfileScreen = ({ history }) => {
 											{retweetedTweets &&
 												retweetedTweets.tweets.map((tweet) => (
 													<div
-														className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
+														className='row ps-3 tweets pb-3 pt-2 pe-md-3 ps-md-3'
 														key={tweet._id}>
 														<div className='p-2 col-2 col-md-1'>
 															<Link to={`/user/${tweet.userdata._id}`}>
@@ -673,7 +705,7 @@ const ProfileScreen = ({ history }) => {
 											{likedTweets &&
 												likedTweets.tweets.map((tweet) => (
 													<div
-														className='d-flex tweets pb-3 pt-2 pe-md-3 ps-md-3'
+														className='row ps-3 tweets pb-3 pt-2 pe-md-3 ps-md-3'
 														key={tweet._id}>
 														<div className='p-2 col-2 col-md-1'>
 															<Link to={`/user/${tweet.userdata._id}`}>

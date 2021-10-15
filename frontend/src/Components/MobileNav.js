@@ -152,7 +152,7 @@ const MobileNav = ({ userInfo, hide }) => {
 			{!hide && (
 				<div
 					id='bottom-nav'
-					className='d-flex bottom-nav  fixed-bottom justify-content-between text-light p-3 pt-1 pb-1 '
+					className='d-flex  bottom-nav  fixed-bottom justify-content-between text-light p-3 pt-1 pb-1 '
 					style={{ borderBottom: '1px solid grey' }}>
 					<div className=''>
 						<Link to='/' className='text-light text-decoration-none'>

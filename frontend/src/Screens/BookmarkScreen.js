@@ -137,7 +137,7 @@ const BookmarkScreen = ({ history }) => {
 										<div className='p-2 col-2 col-md-1 '>
 											<Link
 												className='text-decoration-none text-light'
-												to={`/${tweet.userdata._id}`}>
+												to={`/user/${tweet.userdata._id}`}>
 												{' '}
 												<img
 													className='dp  d-block mx-auto '
@@ -149,7 +149,7 @@ const BookmarkScreen = ({ history }) => {
 										<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
 											<Link
 												className='text-decoration-none text-light'
-												to={`/${tweet.userdata._id}`}>
+												to={`/user/${tweet.userdata._id}`}>
 												<h6 className='mb-0 roboto  d-inline-block pe-1'>
 													{tweet.userdata.name}
 												</h6>

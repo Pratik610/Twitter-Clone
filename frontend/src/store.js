@@ -11,6 +11,8 @@ import {
 	userLoginInfoReducer,
 	userUnfollowReducer,
 	checkUsernameReducer,
+	followingUsersReducer,
+	followersUsersReducer,
 } from './Reducers/userReducer.js'
 import {
 	tweetCreateReducer,
@@ -38,6 +40,8 @@ const reducer = combineReducers({
 	userSearch: userSearchReducer,
 	userById: userByIdReducer,
 	userFollow: userFollowReducer,
+	followingUsers: followingUsersReducer,
+	followersUsers: followersUsersReducer,
 	checkUsername: checkUsernameReducer,
 	userUnfollow: userUnfollowReducer,
 	tweetCreate: tweetCreateReducer,

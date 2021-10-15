@@ -158,6 +158,38 @@ const getLoginUser = asyncHandler(async (req, res) => {
 	}
 })
 
+const getUserFollowing = asyncHandler(async (req, res) => {
+	const id = req.body.id
+	const user = await User.findById(id)
+
+	const followingUsers = await User.find({
+		_id: user.following,
+	}).select('-password')
+
+	if (user) {
+		res.status(201).json(followingUsers)
+	} else {
+		res.status(404)
+		throw new Error('User Not Found')
+	}
+})
+
+const getUserFollowers = asyncHandler(async (req, res) => {
+	const id = req.body.id
+	const user = await User.findById(id)
+
+	const followersUsers = await User.find({
+		_id: user.followers,
+	}).select('-password')
+
+	if (user) {
+		res.status(201).json(followersUsers)
+	} else {
+		res.status(404)
+		throw new Error('User Not Found')
+	}
+})
+
 export {
 	createUser,
 	loginUser,
@@ -168,4 +200,6 @@ export {
 	unfollowUser,
 	getLoginUser,
 	checkUsername,
+	getUserFollowing,
+	getUserFollowers,
 }

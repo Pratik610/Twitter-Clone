@@ -28,6 +28,12 @@ import {
 	CHECK_USERNAME_REQUEST,
 	CHECK_USERNAME_SUCCESS,
 	CHECK_USERNAME_FAIL,
+	GET_FOLLOWING_REQUEST,
+	GET_FOLLOWING_SUCCESS,
+	GET_FOLLOWING_FAIL,
+	GET_FOLLOWERS_REQUEST,
+	GET_FOLLOWERS_SUCCESS,
+	GET_FOLLOWERS_FAIL,
 } from '../Constants/userConstants.js'
 
 export const registerUser =
@@ -317,6 +323,64 @@ export const unfollowUser = (id) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: USER_UNFOLLOW_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const getFollowingUsers = (id) => async (dispatch) => {
+	try {
+		dispatch({
+			type: GET_FOLLOWING_REQUEST,
+		})
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+
+		const { data } = await axios.post('/api/users/following', { id }, config)
+
+		dispatch({
+			type: GET_FOLLOWING_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: GET_FOLLOWING_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const getFollowersUsers = (id) => async (dispatch) => {
+	try {
+		dispatch({
+			type: GET_FOLLOWERS_REQUEST,
+		})
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+
+		const { data } = await axios.post('/api/users/followers', { id }, config)
+
+		dispatch({
+			type: GET_FOLLOWERS_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: GET_FOLLOWERS_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

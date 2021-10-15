@@ -65,6 +65,7 @@ export const getUserTweets = asyncHandler(async (req, res) => {
 // access - private
 export const getFollowingUsersTweets = asyncHandler(async (req, res) => {
 	req.user.following.push(req.user._id)
+	let temp = []
 	const tweets = await Tweet.find({
 		user: req.user.following,
 	}).sort({
@@ -75,13 +76,24 @@ export const getFollowingUsersTweets = asyncHandler(async (req, res) => {
 	for (let index = 0; index < tweets.length; index++) {
 		userList.push(tweets[index].user)
 	}
-
 	const users = await User.find({ _id: userList })
+
+	for (let i = 0; i < tweets.length; i++) {
+		temp.push(tweets[i].refTweetId)
+	}
+	const mainTweets = await Tweet.find({ _id: temp })
+
+	for (let i = 0; i < mainTweets.length; i++) {
+		temp.push(mainTweets[i].user)
+	}
+	const mainUsers = await User.find({ _id: temp })
 
 	if (tweets) {
 		res.status(201).json({
 			tweets,
 			users,
+			mainTweets,
+			mainUsers,
 		})
 	} else {
 		res.status(400)

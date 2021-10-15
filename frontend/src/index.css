@@ -170,10 +170,14 @@ body {
 
 /* ........................Profile........... */
 .profilePhoto{
-	min-width: 74px;
-	max-width: 75px !important;
-	max-height:75px;
+	min-width: 120px;
+	max-width: 120px !important;
+	max-height:120px;
+	outline: 1px solid rgb(47, 51, 54);
 	
+}
+.border-bottom{
+	border-bottom:1px solid rgb(47, 51, 54) !important ;
 }
 .active {
 	background-color: none !important;
@@ -214,9 +218,15 @@ body {
 		height: 20vh;
 	}
 	.editprofile img {
-		margin-top: -13%;
+		margin-top: -17%;
 		width: 80px;
 	}
+	.profilePhoto{
+	min-width: 100px;
+	max-width: 100px !important;
+	max-height:100px;
+	
+}
 	.tweet-screen-text {
 		font-size: 20px;
 		font-weight: 500;
