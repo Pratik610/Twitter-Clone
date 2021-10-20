@@ -47,6 +47,7 @@ const SearchBox = () => {
 										className='dp d-block mx-auto '
 										src={user.profilePhoto}
 										alt='profile'
+										onError={(e) => (e.target.src = '/uploads/default.png')}
 									/>
 								</div>
 								<div className='col-10 pt-2 text-light ps-3'>

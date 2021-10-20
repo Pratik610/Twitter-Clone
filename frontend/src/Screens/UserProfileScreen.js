@@ -178,6 +178,7 @@ const UserProfileScreen = ({ history, match }) => {
 										className='img-fluid profilePhoto rounded-circle '
 										src={userData.profilePhoto}
 										alt='profile'
+										onError={(e) => (e.target.src = '/uploads/default.png')}
 									/>
 
 									{userData.followers.find((id) => {
@@ -330,6 +331,10 @@ const UserProfileScreen = ({ history, match }) => {
 																								className='dp d-block mx-auto '
 																								src={user.profilePhoto}
 																								alt='profile'
+																								onError={(e) =>
+																									(e.target.src =
+																										'/uploads/default.png')
+																								}
 																							/>
 																							<div
 																								className='line w-100 mx-auto '
@@ -477,6 +482,9 @@ const UserProfileScreen = ({ history, match }) => {
 															className='dp d-block mx-auto '
 															src={userData.profilePhoto}
 															alt='profile'
+															onError={(e) =>
+																(e.target.src = '/uploads/default.png')
+															}
 														/>
 													</div>
 													<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
@@ -572,6 +580,9 @@ const UserProfileScreen = ({ history, match }) => {
 																className='dp d-block mx-auto '
 																src={tweet.userdata.profilePhoto}
 																alt='profile'
+																onError={(e) =>
+																	(e.target.src = '/uploads/default.png')
+																}
 															/>
 														</Link>
 													</div>
@@ -698,6 +709,9 @@ const UserProfileScreen = ({ history, match }) => {
 																className='dp d-block mx-auto '
 																src={tweet.userdata.profilePhoto}
 																alt='profile'
+																onError={(e) =>
+																	(e.target.src = '/uploads/default.png')
+																}
 															/>
 														</Link>
 													</div>

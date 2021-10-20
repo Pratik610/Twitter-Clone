@@ -12,8 +12,10 @@ const SearchScreen = () => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(getLoginUserInfo(userId._id))
-	}, [userId._id, dispatch])
+		if (!userInfo) {
+			dispatch(getLoginUserInfo(userId._id))
+		}
+	}, [userId._id, dispatch, userInfo])
 	return (
 		<div className=' news '>
 			{userInfo && (

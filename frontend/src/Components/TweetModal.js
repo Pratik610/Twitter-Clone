@@ -68,6 +68,7 @@ const TweetModal = ({ userInfo }) => {
 										className='dp d-block mx-auto '
 										src={userInfo.profilePhoto}
 										alt='profile'
+										onError={(e) => (e.target.src = '/uploads/default.png')}
 									/>
 								</div>
 								<div className='col-10 ps-3 '>

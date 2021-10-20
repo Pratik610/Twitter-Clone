@@ -49,10 +49,22 @@ const BookmarkScreen = ({ history }) => {
 		if (!userId) {
 			history.push('/login')
 		} else {
-			dispatch(getLoginUserInfo(userId._id))
+			if (!userInfo) {
+				dispatch(getLoginUserInfo(userId._id))
+			}
 			dispatch(getBookmarkedTweets())
 		}
-	}, [userId, history, dispatch, liked, unliked, ret, unret, unbTweet])
+	}, [
+		userId,
+		history,
+		dispatch,
+		userInfo,
+		liked,
+		unliked,
+		ret,
+		unret,
+		unbTweet,
+	])
 
 	if (bTweets) {
 		for (let i = 0; i < bTweets.tweets.length; i++) {
@@ -143,6 +155,9 @@ const BookmarkScreen = ({ history }) => {
 													className='dp  d-block mx-auto '
 													src={tweet.userdata.profilePhoto}
 													alt='profile'
+													onError={(e) =>
+														(e.target.src = '/uploads/default.png')
+													}
 												/>
 											</Link>
 										</div>

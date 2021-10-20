@@ -30,7 +30,7 @@ const createUser = asyncHandler(async (req, res) => {
 
 const checkUsername = asyncHandler(async (req, res) => {
 	const { atTheRate } = req.body
-	console.log(atTheRate)
+
 	const user = await User.findOne({ atTheRate })
 
 	if (user) {
@@ -66,22 +66,23 @@ const editUserProfile = asyncHandler(async (req, res) => {
 		user.website = req.body.website || user.website
 		user.coverPhoto = req.body.coverPhoto || user.coverPhoto
 		user.profilePhoto = req.body.profilePhoto || user.profilePhoto
+		user.posi = req.body.posi || user.posi
 
 		const updatedUser = await user.save()
 		res.json({
 			_id: user._id,
-			name: user.name,
-			email: user.email,
-			atTheRate: user.atTheRate,
-			bio: user.bio,
-			website: user.website,
-			DOB: user.DOB,
-			isAdmin: user.isAdmin,
-			profilePhoto: user.profilePhoto,
-			coverPhoto: user.coverPhoto,
-			followers: user.followers,
-			following: user.following,
-			createdAt: user.createdAt,
+			// name: user.name,
+			// email: user.email,
+			// atTheRate: user.atTheRate,
+			// bio: user.bio,
+			// website: user.website,
+			// DOB: user.DOB,
+			// isAdmin: user.isAdmin,
+			// profilePhoto: user.profilePhoto,
+			// coverPhoto: user.coverPhoto,
+			// followers: user.followers,
+			// following: user.following,
+			// createdAt: user.createdAt,
 			token: generateToken(user._id),
 		})
 	} else {
@@ -190,6 +191,23 @@ const getUserFollowers = asyncHandler(async (req, res) => {
 	}
 })
 
+const getRandomUsers = asyncHandler(async (req, res) => {
+	const user = req.user
+	const skipUsers = parseInt(req.body.skip)
+	// { following: { $nin: user.following } }
+	const users = await User.find({ _id: { $nin: user._id } })
+		.limit(4)
+		.skip(skipUsers)
+		.select('-password')
+
+	if (user) {
+		res.status(201).json(users)
+	} else {
+		res.status(404)
+		throw new Error('Users not found')
+	}
+})
+
 export {
 	createUser,
 	loginUser,
@@ -202,4 +220,5 @@ export {
 	checkUsername,
 	getUserFollowing,
 	getUserFollowers,
+	getRandomUsers,
 }

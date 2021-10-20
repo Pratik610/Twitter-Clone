@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: 'uploads/defaultBackground.png',
 		},
+		posi: {
+			type: String,
+			default: 'center',
+		},
 		followers: [
 			{
 				type: mongoose.Schema.Types.ObjectId,

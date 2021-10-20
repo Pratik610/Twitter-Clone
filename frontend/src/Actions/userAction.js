@@ -34,6 +34,9 @@ import {
 	GET_FOLLOWERS_REQUEST,
 	GET_FOLLOWERS_SUCCESS,
 	GET_FOLLOWERS_FAIL,
+	GET_USERS_REQUEST,
+	GET_USERS_SUCCESS,
+	GET_USERS_FAIL,
 } from '../Constants/userConstants.js'
 
 export const registerUser =
@@ -170,7 +173,7 @@ export const logoutUser = () => async (dispatch) => {
 }
 
 export const updateUser =
-	(name, bio, website, coverPhoto, profilePhoto) =>
+	(name, bio, website, coverPhoto, profilePhoto, posi) =>
 	async (dispatch, getState) => {
 		try {
 			dispatch({
@@ -188,7 +191,7 @@ export const updateUser =
 			}
 			const { data } = await axios.put(
 				'/api/users/edit',
-				{ name, bio, website, coverPhoto, profilePhoto },
+				{ name, bio, website, coverPhoto, profilePhoto, posi },
 				config
 			)
 
@@ -381,6 +384,39 @@ export const getFollowersUsers = (id) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: GET_FOLLOWERS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const getRandomUsers = (skip) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: GET_USERS_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		const { data } = await axios.post('/api/users/explore', { skip }, config)
+
+		dispatch({
+			type: GET_USERS_SUCCESS,
+			payload: data,
+		})
+	} catch (error) {
+		dispatch({
+			type: GET_USERS_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

@@ -64,13 +64,26 @@ const ProfileScreen = ({ history }) => {
 
 		if (userId) {
 			if (userId._id) {
-				dispatch(getLoginUserInfo(userId._id))
+				if (!userInfo) {
+					dispatch(getLoginUserInfo(userId._id))
+				}
 				dispatch(tweetsOfUser(userId._id))
 				dispatch(getLikedTweets(userId._id))
 				dispatch(getRetweetedTweets(userId._id))
 			}
 		}
-	}, [history, dispatch, userId, unliked, liked, ret, unret, bTweet, unbTweet])
+	}, [
+		history,
+		dispatch,
+		userInfo,
+		userId,
+		unliked,
+		liked,
+		ret,
+		unret,
+		bTweet,
+		unbTweet,
+	])
 
 	if (retweetedTweets) {
 		for (let i = 0; i < retweetedTweets.tweets.length; i++) {
@@ -140,21 +153,15 @@ const ProfileScreen = ({ history }) => {
 												userInfo.coverPhoto.split('uploads')[1]
 											})`,
 											backgroundRepeat: 'no-repeat',
-											backgroundPosition: 'center-top',
+											backgroundPosition: `${userInfo.posi}`,
 											backgroundSize: 'cover',
-										}}>
-										{/* <img
-										className='w-100  '
-										src={userInfo.coverPhoto}
-										alt='profile'
-										style={{ height: '100%' }}
-									/> */}
-									</div>
+										}}></div>
 									<div className=' editprofile p-3 pb-0 pt-2'>
 										<img
 											className='img-fluid profilePhoto  rounded-circle '
 											src={userInfo.profilePhoto}
 											alt='profile'
+											onError={(e) => (e.target.src = '/uploads/default.png')}
 										/>
 
 										<Link to='/editprofile'>
@@ -203,8 +210,12 @@ const ProfileScreen = ({ history }) => {
 											</Link>{' '}
 										</span>
 										<span className='p-3 text-light'>
-											{userInfo.followers.length}
-											<span className='text-muted'> Followers</span>{' '}
+											<Link
+												className=' text-muted text-decoration-none'
+												to={'/followers'}>
+												{userInfo.followers.length}
+												<span className='text-muted'> Followers</span>{' '}
+											</Link>{' '}
 										</span>
 									</div>
 
@@ -313,6 +324,10 @@ const ProfileScreen = ({ history }) => {
 																										className='dp d-block mx-auto '
 																										src={user.profilePhoto}
 																										alt='profile'
+																										onError={(e) =>
+																											(e.target.src =
+																												'/uploads/default.png')
+																										}
 																									/>
 																									<div
 																										className='line w-100 mx-auto '
@@ -470,6 +485,9 @@ const ProfileScreen = ({ history }) => {
 																	className='dp d-block mx-auto '
 																	src={userInfo.profilePhoto}
 																	alt='profile'
+																	onError={(e) =>
+																		(e.target.src = '/uploads/default.png')
+																	}
 																/>
 															</div>
 															<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
@@ -584,6 +602,9 @@ const ProfileScreen = ({ history }) => {
 																	className='dp d-block mx-auto '
 																	src={tweet.userdata.profilePhoto}
 																	alt='profile'
+																	onError={(e) =>
+																		(e.target.src = '/uploads/default.png')
+																	}
 																/>
 															</Link>
 														</div>
@@ -713,6 +734,9 @@ const ProfileScreen = ({ history }) => {
 																	className='dp d-block mx-auto '
 																	src={tweet.userdata.profilePhoto}
 																	alt='profile'
+																	onError={(e) =>
+																		(e.target.src = '/uploads/default.png')
+																	}
 																/>
 															</Link>
 														</div>

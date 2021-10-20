@@ -35,6 +35,9 @@ import {
 	GET_FOLLOWERS_REQUEST,
 	GET_FOLLOWERS_SUCCESS,
 	GET_FOLLOWERS_FAIL,
+	GET_USERS_REQUEST,
+	GET_USERS_SUCCESS,
+	GET_USERS_FAIL,
 } from '../Constants/userConstants.js'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -183,6 +186,22 @@ export const followersUsersReducer = (state = {}, action) => {
 		case GET_FOLLOWERS_SUCCESS:
 			return { loading: false, followers: action.payload }
 		case GET_FOLLOWERS_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const getUsersReducer = (state = { getUsers: {} }, action) => {
+	switch (action.type) {
+		case GET_USERS_REQUEST:
+			return { loading: true }
+		case GET_USERS_SUCCESS:
+			return {
+				loading: false,
+				users: action.payload,
+			}
+		case GET_USERS_FAIL:
 			return { loading: false, error: action.payload }
 		default:
 			return state

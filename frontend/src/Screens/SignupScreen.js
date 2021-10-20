@@ -60,7 +60,8 @@ const SignupScreen = ({ history }) => {
 	}
 
 	const getUserName = (e) => {
-		setUsername(e.target.value)
+		setUsername(e.target.value.toLowerCase())
+
 		dispatch(checkUserName(e.target.value))
 	}
 
@@ -213,7 +214,9 @@ const SignupScreen = ({ history }) => {
 								<button
 									type='submit'
 									className=' tweet-btn btn d-block roboto w-md-75 signup-btn  mx-auto mt-4 pt-1 pb-1'>
-									<h6 style={{ fontSize: '1.1em' }}>Register</h6>
+									<h6 className='mt-1 pb-0' style={{ fontSize: '1.1em' }}>
+										Register
+									</h6>
 								</button>
 								<p className='text-center mt-3'>
 									{' '}

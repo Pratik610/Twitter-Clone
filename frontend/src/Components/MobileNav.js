@@ -40,6 +40,7 @@ const MobileNav = ({ userInfo, hide }) => {
 							style={{ borderRadius: '50%' }}
 							src={userInfo.profilePhoto}
 							alt='profile'
+							onError={(e) => (e.target.src = '/uploads/default.png')}
 						/>
 						<h6 className='mt-2 mb-3 pb-0'>
 							<span style={{ fontWeight: 'bold' }}> {userInfo.name}</span>
@@ -51,15 +52,18 @@ const MobileNav = ({ userInfo, hide }) => {
 							</span>
 						</h6>
 					</Link>
-
-					<span>
-						{userInfo.following.length}{' '}
-						<span className='text-muted'> Following </span>
-					</span>
-					<span className='p-3'>
-						{userInfo.followers.length}
-						<span className='text-muted'> Followers</span>{' '}
-					</span>
+					<Link to={`/following`} className='text-decoration-none '>
+						<span className='text-light'>
+							{userInfo.following.length}{' '}
+							<span className='text-muted'> Following </span>
+						</span>
+					</Link>
+					<Link to={`/followers`} className='text-decoration-none '>
+						<span className='p-3 text-light'>
+							{userInfo.followers.length}
+							<span className='text-muted'> Followers</span>{' '}
+						</span>
+					</Link>
 				</div>
 				{/* links */}
 				<div style={{ fontSize: '1em', fontWeight: '900' }}>
@@ -70,6 +74,17 @@ const MobileNav = ({ userInfo, hide }) => {
 								<i className='fas fa-user ' style={{ fontSize: '1.2em' }}></i>
 							</div>
 							<div className='w-100 col-10 ps-2  '>Profile</div>
+						</div>
+					</Link>
+					<Link to='/explore' className='text-light text-decoration-none'>
+						<div className='p-3 pt-1 d-flex mb-1'>
+							<div className='col-2 text-center'>
+								{' '}
+								<i
+									className='fas fa-hashtag '
+									style={{ fontSize: '1.2em' }}></i>
+							</div>
+							<div className='w-100 col-10 ps-2 '>Explore</div>
 						</div>
 					</Link>
 					<Link to='/bookmarks' className='text-light text-decoration-none'>
@@ -121,6 +136,7 @@ const MobileNav = ({ userInfo, hide }) => {
 							className='dp-sm  img-fluid'
 							src={userInfo.profilePhoto}
 							alt='profile'
+							onError={(e) => (e.target.src = '/uploads/default.png')}
 							onClick={open}
 						/>
 					</div>

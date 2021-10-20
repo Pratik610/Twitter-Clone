@@ -38,10 +38,12 @@ const FollowersScreen = ({ history }) => {
 		if (!userId) {
 			history.push('/login')
 		} else {
-			dispatch(getLoginUserInfo(userId._id))
+			if (!userInfo) {
+				dispatch(getLoginUserInfo(userId._id))
+			}
 			dispatch(getFollowersUsers(userId._id))
 		}
-	}, [userId, history, dispatch, unfollow, follow])
+	}, [userId, history, dispatch, unfollow, follow, userInfo])
 
 	return (
 		<>
@@ -172,16 +174,23 @@ const FollowersScreen = ({ history }) => {
 												className='w-100  d-flex border-bottom p-3 pe-2'
 												style={{ alignItems: 'center' }}>
 												<div className='  col-2 '>
-													<Link to={`/user/${user._id}`}>
+													<Link
+														to={`/user/${user._id}`}
+														className='text-decoration-none '>
 														<img
 															className='dp d-block mx-auto '
 															src={user.profilePhoto}
 															alt='profile'
+															onError={(e) =>
+																(e.target.src = '/uploads/default.png')
+															}
 														/>
 													</Link>
 												</div>
 												<div className=' col-5 '>
-													<Link to={`/user/${user._id}`}>
+													<Link
+														to={`/user/${user._id}`}
+														className='text-decoration-none '>
 														<p
 															style={{
 																overflowWrap: 'break-word',

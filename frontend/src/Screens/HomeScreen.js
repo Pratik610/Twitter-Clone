@@ -52,13 +52,15 @@ const HomeScreen = ({ history }) => {
 	const { bookmarkedTweet: bTweet } = bookmarkTweet
 
 	const unbookmarkTweet = useSelector((state) => state.unbookmarkTweet)
-	const { unbookmarkTweet: unbTweet } = unbookmarkTweet
+	const { unbookmarkedTweet: unbTweet } = unbookmarkTweet
 
 	useEffect(() => {
 		if (!userId) {
 			history.push('/login')
 		} else {
-			dispatch(getLoginUserInfo(userId._id))
+			if (!userInfo) {
+				dispatch(getLoginUserInfo(userId._id))
+			}
 			dispatch(followingTweets())
 		}
 	}, [
@@ -67,6 +69,7 @@ const HomeScreen = ({ history }) => {
 		dispatch,
 		liked,
 		unliked,
+		userInfo,
 		ret,
 		unret,
 		bTweet,
@@ -188,6 +191,7 @@ const HomeScreen = ({ history }) => {
 										className='dp d-block mx-auto mt-3'
 										src={userInfo.profilePhoto}
 										alt='profile'
+										onError={(e) => (e.target.src = '/uploads/default.png')}
 									/>
 								</div>
 								<div className='col-10 p-3   text-light '>
@@ -277,6 +281,7 @@ const HomeScreen = ({ history }) => {
 																	{mainTweet.user === user._id && (
 																		<>
 																			<div
+																				key={user._id}
 																				className='col-md-11 col-12 offset-2 ps-2 ps-md-4 offset-md-1 text-muted'
 																				style={{ fontSize: '0.8em' }}>
 																				<span>Replying to {user.name}</span>
@@ -291,6 +296,10 @@ const HomeScreen = ({ history }) => {
 																						className='dp d-block mx-auto '
 																						src={user.profilePhoto}
 																						alt='profile'
+																						onError={(e) =>
+																							(e.target.src =
+																								'/uploads/default.png')
+																						}
 																					/>
 																					<div
 																						className='line w-100 mx-auto '
@@ -442,6 +451,9 @@ const HomeScreen = ({ history }) => {
 														className='dp  d-block mx-auto '
 														src={tweet.userdata.profilePhoto}
 														alt='profile'
+														onError={(e) =>
+															(e.target.src = '/uploads/default.png')
+														}
 													/>
 												</Link>
 											</div>

@@ -19,6 +19,8 @@ import {
 	tweetCreate,
 	getTweetById,
 	getRepliedTweets,
+	bookmark,
+	unbookmark,
 } from '../Actions/tweetAction.js'
 import { getLoginUserInfo } from '../Actions/userAction.js'
 
@@ -50,24 +52,38 @@ const TweetScreen = ({ history, match }) => {
 	const tweetUnretweet = useSelector((state) => state.tweetUnretweet)
 	const { unretweet: unret } = tweetUnretweet
 
+	const bookmarkTweet = useSelector((state) => state.bookmarkTweet)
+	const { bookmarkedTweet: bTweet } = bookmarkTweet
+
+	const unbookmarkTweet = useSelector((state) => state.unbookmarkTweet)
+	const { unbookmarkedTweet: unbTweet } = unbookmarkTweet
+
 	useEffect(() => {
 		if (!userId) {
 			history.push('/login')
 		} else {
-			dispatch(getLoginUserInfo(userId._id))
-			dispatch(getTweetById(match.params.id))
+			if (!userInfo) {
+				dispatch(getLoginUserInfo(userId._id))
+			}
+			if (!tweetData) {
+				dispatch(getTweetById(match.params.id))
+			}
 			dispatch(getRepliedTweets(match.params.id))
 		}
 	}, [
 		userId,
 		history,
 		dispatch,
+		userInfo,
 		liked,
 		unliked,
 		ret,
 		unret,
+		tweetData,
 		match.params.id,
 		tweetCreated,
+		bTweet,
+		unbTweet,
 	])
 
 	const [text, setText] = useState('')
@@ -199,6 +215,9 @@ const TweetScreen = ({ history, match }) => {
 														className='dp d-block mx-auto '
 														src={tweetData.user.profilePhoto}
 														alt='profile'
+														onError={(e) =>
+															(e.target.src = '/uploads/default.png')
+														}
 													/>
 												</Link>
 											</div>
@@ -287,7 +306,21 @@ const TweetScreen = ({ history, match }) => {
 												)}
 											</div>
 											<div className='col-4 text-center'>
-												<i className='far fa-bookmark'></i>
+												{tweetData.tweet.bookmark.find((id) => {
+													return id === userInfo._id
+												}) ? (
+													<i
+														className={`fas fa-bookmark `}
+														onClick={(e) => {
+															dispatch(unbookmark(tweetData.tweet._id))
+														}}></i>
+												) : (
+													<i
+														className={`far fa-bookmark  like-btn `}
+														onClick={(e) => {
+															dispatch(bookmark(tweetData.tweet._id))
+														}}></i>
+												)}
 											</div>
 										</div>
 									</div>
@@ -378,6 +411,9 @@ const TweetScreen = ({ history, match }) => {
 																className='dp d-block mx-auto '
 																src={userInfo.profilePhoto}
 																alt='profile'
+																onError={(e) =>
+																	(e.target.src = '/uploads/default.png')
+																}
 															/>
 														</Link>
 													</div>
@@ -460,7 +496,21 @@ const TweetScreen = ({ history, match }) => {
 																{tweet.likes.length}
 															</div>
 															<div className='col-3'>
-																<i className='far fa-bookmark'></i>
+																{tweet.likes.find((id) => {
+																	return id === userId._id
+																}) ? (
+																	<i
+																		className={`fas fa-bookmark `}
+																		onClick={(e) => {
+																			dispatch(unbookmark(tweet._id))
+																		}}></i>
+																) : (
+																	<i
+																		className={`far fa-bookmark `}
+																		onClick={(e) => {
+																			dispatch(bookmark(tweet._id))
+																		}}></i>
+																)}{' '}
 															</div>
 														</div>
 													</div>
