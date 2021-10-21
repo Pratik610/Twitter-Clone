@@ -157,21 +157,20 @@ const UserProfileScreen = ({ history, match }) => {
 
 								<div
 									className='cover pt-1 '
-									// style={{
-									// 		backgroundImage: `url(uploads/${
-									// 			userInfo.coverPhoto.split('uploads')[1]
-									// 		})`,
-									// 		backgroundRepeat: 'no-repeat',
-									// 		backgroundPosition: 'center-top',
-									// 		backgroundSize: 'cover',
-									// 	}}
-								>
-									<img
+									style={{
+										backgroundImage: `url(uploads/${
+											userData.coverPhoto.split('uploads/')[1]
+										})`,
+										backgroundRepeat: 'no-repeat',
+										backgroundPosition: `${userData.posi}`,
+										backgroundSize: 'cover',
+									}}>
+									{/* <img
 										className='w-100  '
 										src={userData.coverPhoto}
 										alt='profile'
 										style={{ height: 'fill' }}
-									/>
+									/> */}
 								</div>
 								<div className=' editprofile p-3 pb-0 pt-2'>
 									<img
