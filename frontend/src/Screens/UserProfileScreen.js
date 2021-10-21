@@ -343,19 +343,6 @@ const UserProfileScreen = ({ history, match }) => {
 																										'/uploads/default.png')
 																								}
 																							/>
-																							<div
-																								className='line w-100 mx-auto '
-																								style={{
-																									width: '100%',
-																									height: '100%',
-																								}}>
-																								<p
-																									className='text-center mx-auto bg-dark'
-																									style={{
-																										width: '2px',
-																										height: '100%',
-																									}}></p>
-																							</div>
 																						</Link>
 																					</div>
 																					<div className='col-10 mb-3 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
@@ -373,28 +360,32 @@ const UserProfileScreen = ({ history, match }) => {
 																								{userInfo.atTheRate}
 																							</span>
 																						</Link>
-																						<p
-																							style={{
-																								overflowWrap: 'break-word',
-																								whiteSpace: 'pre',
-																							}}
-																							className='mb-0'>
-																							{mainTweet.text}
-																						</p>
-																						{mainTweet.image && (
-																							<div className='img-output mb-2    w-100  '>
-																								<img
-																									id='output'
-																									style={{
-																										width: '90%',
-																										height: '90%',
-																									}}
-																									src={mainTweet.image}
-																									alt='img'
-																									className='img-fluid  d-block  rounded'
-																								/>
-																							</div>
-																						)}
+																						<Link
+																							className='text-decoration-none text-light'
+																							to={`/tweet/${mainTweet._id}`}>
+																							<p
+																								style={{
+																									overflowWrap: 'break-word',
+																									whiteSpace: 'pre',
+																								}}
+																								className='mb-0'>
+																								{mainTweet.text}
+																							</p>
+																							{mainTweet.image && (
+																								<div className='img-output mb-2    w-100  '>
+																									<img
+																										id='output'
+																										style={{
+																											width: '90%',
+																											height: '90%',
+																										}}
+																										src={mainTweet.image}
+																										alt='img'
+																										className='img-fluid  d-block  rounded'
+																									/>
+																								</div>
+																							)}
+																						</Link>
 																						<div className='d-flex mt-2 text-muted '>
 																							<div className='col-3'>
 																								<Link
@@ -504,7 +495,33 @@ const UserProfileScreen = ({ history, match }) => {
 															style={{ fontSize: '0.8em' }}>
 															{userData.atTheRate}
 														</span>
-														<p>{tweet.text}</p>
+														<Link
+															className='text-decoration-none text-light'
+															to={`/tweet/${tweet._id}`}>
+															<p
+																style={{
+																	overflowWrap: 'break-word',
+																	whiteSpace: 'pre',
+																}}
+																className='mb-0'>
+																{tweet.text}
+															</p>
+															{tweet.image && (
+																<div className='img-output mb-2    w-100  '>
+																	<img
+																		id='output'
+																		style={{
+																			width: '90%',
+																			height: '90%',
+																		}}
+																		src={tweet.image}
+																		alt='img'
+																		className='img-fluid  d-block  rounded'
+																	/>
+																</div>
+															)}
+														</Link>
+
 														<div className='d-flex mt-2 text-muted '>
 															<div className='col-3'>
 																<Link
