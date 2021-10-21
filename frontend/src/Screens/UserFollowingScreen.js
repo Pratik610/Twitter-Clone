@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Sidenav from '../Components/Sidenav'
 import News from '../Components/News'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import MobileNav from '../Components/MobileNav'
 import TweetModal from '../Components/TweetModal'
 import Loader from '../Components/Loader.js'
@@ -11,13 +11,12 @@ import { USER_LOGOUT } from '../Constants/userConstants.js'
 import { useSelector, useDispatch } from 'react-redux'
 import {
 	getLoginUserInfo,
-	getFollowersUsers,
+	getFollowingUsers,
 	unfollowUser,
 	followUser,
-	getUserById,
 } from '../Actions/userAction.js'
 
-const FollowersScreen = ({ history }) => {
+const UserFollowingScreen = ({ history, match }) => {
 	const dispatch = useDispatch()
 
 	const userLogin = useSelector((state) => state.userLogin)
@@ -26,20 +25,11 @@ const FollowersScreen = ({ history }) => {
 	const userLoginInfo = useSelector((state) => state.userLoginInfo)
 	const { userInfo, loading: homeLoading } = userLoginInfo
 
-	const followersUsers = useSelector((state) => state.followersUsers)
-	const { followers, loading: usersLoading } = followersUsers
+	const followingUsers = useSelector((state) => state.followingUsers)
+	const { followingUsers: following, loading: usersLoading } = followingUsers
 
 	const userUnfollow = useSelector((state) => state.userUnfollow)
 	const { unfollow } = userUnfollow
-
-	const userFollow = useSelector((state) => state.userFollow)
-	const { follow } = userFollow
-
-	const userById = useSelector((state) => state.userById)
-	const { userData } = userById
-
-	const search = useLocation().search
-	const id = new URLSearchParams(search).get('id')
 
 	useEffect(() => {
 		if (!userId) {
@@ -48,14 +38,9 @@ const FollowersScreen = ({ history }) => {
 			if (!userInfo) {
 				dispatch(getLoginUserInfo(userId._id))
 			}
-			if (id) {
-				dispatch(getUserById(id))
-				dispatch(getFollowersUsers(id))
-			} else {
-				dispatch(getFollowersUsers(userId._id))
-			}
+			dispatch(getFollowingUsers(match.params.id))
 		}
-	}, [userId, history, dispatch, unfollow, follow, userInfo, id])
+	}, [userId, history, dispatch, userInfo, unfollow, match.params.id])
 
 	return (
 		<>
@@ -109,10 +94,10 @@ const FollowersScreen = ({ history }) => {
 							</div>
 							<div className='d-none mt-2 d-md-block'>
 								<h5 className='roboto ms-2 text-capitalize font-weight-bold text-light mb-0'>
-									{id ? userData && userData.name : userInfo.name}
+									{userInfo.name}
 								</h5>
 								<small className='text-muted  ms-2 mt-0'>
-									{id ? userData && userData.atTheRate : userInfo.atTheRate}
+									{userInfo.atTheRate}
 								</small>
 							</div>
 
@@ -128,8 +113,9 @@ const FollowersScreen = ({ history }) => {
 								<li className='nav-item  pt-2 pb-0 col-6' role='presentation'>
 									<Link
 										className='text-decoration-none text-light'
-										to={`${id ? `/following?id=${id}` : '/following'}`}>
+										to={'/following'}>
 										<div
+											className='active  pb-0'
 											id='home-tab'
 											data-bs-toggle='tab'
 											data-bs-target='#following'
@@ -153,7 +139,6 @@ const FollowersScreen = ({ history }) => {
 										to={'/followers'}>
 										<div
 											id='profile-tab'
-											className='active  pb-0'
 											data-bs-toggle='tab'
 											data-bs-target='#followers'
 											role='tab'
@@ -171,17 +156,12 @@ const FollowersScreen = ({ history }) => {
 
 							<div className='tab-content  text-light' id='myTabContent'>
 								<div
-									className='tab-pane fade show '
+									className='tab-pane fade show active'
 									id='following'
 									role='tabpanel'
-									aria-labelledby='home-tab'></div>
-								<div
-									className='tab-pane fade active show '
-									id='followers'
-									role='tabpanel'
 									aria-labelledby='home-tab'>
-									{followers &&
-										followers.map((user) => (
+									{following &&
+										following.map((user) => (
 											<div
 												className='w-100  d-flex border-bottom p-3 pe-2'
 												style={{ alignItems: 'center' }}>
@@ -221,46 +201,48 @@ const FollowersScreen = ({ history }) => {
 														</span>
 													</Link>
 												</div>
-
-												{user._id !== userInfo._id && (
-													<div className=' col-5 '>
-														{userInfo.following.find((id) => {
-															return id === user._id
-														}) ? (
-															<button
-																className='float-end mx-auto btn p-4 pt-1 pb-1 text-light  '
-																onClick={() => dispatch(unfollowUser(user._id))}
-																style={{
-																	borderRadius: '20px',
-																	border: '2px solid grey',
-																	fontWeight: 'bold',
-																}}>
-																Unfollow
-															</button>
-														) : (
-															<button
-																className='float-end mx-auto btn p-4 pt-1 pb-1   '
-																onClick={() => dispatch(followUser(user._id))}
-																style={{
-																	borderRadius: '20px',
-																	border: '2px solid grey',
-																	background: 'white',
-																	color: 'black',
-																	fontWeight: 'bold',
-																}}>
-																Follow
-															</button>
-														)}
-													</div>
-												)}
+												<div className=' col-5 '>
+													{userInfo.followers.find((id) => {
+														return id === userId._id
+													}) ? (
+														<button
+															className='float-end mx-auto btn p-4 pt-1 pb-1 text-light  '
+															onClick={() => dispatch(unfollowUser(user._id))}
+															style={{
+																borderRadius: '20px',
+																border: '2px solid grey',
+																fontWeight: 'bold',
+															}}>
+															Unfollow
+														</button>
+													) : (
+														<button
+															className='float-end mx-auto btn p-4 pt-1 pb-1   '
+															onClick={() => dispatch(followUser(user._id))}
+															style={{
+																borderRadius: '20px',
+																border: '2px solid grey',
+																background: 'white',
+																color: 'black',
+																fontWeight: 'bold',
+															}}>
+															Follow
+														</button>
+													)}
+												</div>
 											</div>
 										))}
-									{followers && followers.length === 0 && (
+									{following && following.length === 0 && (
 										<h6 className='text-light text-center roboto mt-5'>
-											0 Followers
+											0 Following
 										</h6>
 									)}
 								</div>
+								<div
+									className='tab-pane fade show '
+									id='followers'
+									role='tabpanel'
+									aria-labelledby='home-tab'></div>
 							</div>
 						</div>
 
@@ -274,4 +256,4 @@ const FollowersScreen = ({ history }) => {
 	)
 }
 
-export default FollowersScreen
+export default UserFollowingScreen

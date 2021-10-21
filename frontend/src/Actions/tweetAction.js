@@ -42,6 +42,9 @@ import {
 	GET_BOOKMARKED_REQUEST,
 	GET_BOOKMARKED_SUCCESS,
 	GET_BOOKMARKED_FAIL,
+	TWEET_DELETE_FAIL,
+	TWEET_DELETE_SUCCESS,
+	TWEET_DELETE_REQUEST,
 } from '../Constants/tweetConstants.js'
 
 export const tweetCreate = (tweetInfo) => async (dispatch, getState) => {
@@ -481,6 +484,37 @@ export const getTweetById = (id) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: GET_TWEET_BY_ID_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		})
+	}
+}
+
+export const tweetDelete = (id) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: TWEET_DELETE_REQUEST,
+		})
+		const {
+			userLogin: { userId },
+		} = getState()
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userId.token}`,
+			},
+		}
+
+		await axios.delete(`/api/tweet/delete/${id}`, config)
+
+		dispatch({
+			type: TWEET_DELETE_SUCCESS,
+		})
+	} catch (error) {
+		dispatch({
+			type: TWEET_DELETE_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

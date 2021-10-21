@@ -16,6 +16,7 @@ import {
 	bookmarkTweet,
 	unbookmarkTweet,
 	bookmarkedTweets,
+	deleteTweet,
 } from '../controlers/tweetControlers.js'
 
 router
@@ -27,6 +28,7 @@ router.route('/usertweets/:id').get(getUserTweets)
 router.route('/replied/:id').get(repliedTweets)
 router.route('/tweet/:id').get(protect, getTweetById)
 router.route('/like').post(protect, likeTweet)
+router.route('/delete/:id').delete(protect, deleteTweet)
 router.route('/unlike').post(protect, unlikeTweet)
 router.route('/retweet').post(protect, retweet)
 router.route('/bookmark').post(protect, bookmarkTweet)

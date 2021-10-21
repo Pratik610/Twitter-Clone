@@ -42,6 +42,9 @@ import {
 	GET_BOOKMARKED_REQUEST,
 	GET_BOOKMARKED_SUCCESS,
 	GET_BOOKMARKED_FAIL,
+	TWEET_DELETE_REQUEST,
+	TWEET_DELETE_SUCCESS,
+	TWEET_DELETE_FAIL,
 } from '../Constants/tweetConstants.js'
 
 export const tweetCreateReducer = (state = {}, action) => {
@@ -223,6 +226,19 @@ export const bookmarkedTweetsReducer = (state = {}, action) => {
 		case GET_BOOKMARKED_SUCCESS:
 			return { loading: false, bookmarkedTweets: action.payload }
 		case GET_BOOKMARKED_FAIL:
+			return { loading: false, error: action.payload }
+		default:
+			return state
+	}
+}
+
+export const deleteTweetReducer = (state = {}, action) => {
+	switch (action.type) {
+		case TWEET_DELETE_REQUEST:
+			return { loading: true }
+		case TWEET_DELETE_SUCCESS:
+			return { loading: false, delete: true }
+		case TWEET_DELETE_FAIL:
 			return { loading: false, error: action.payload }
 		default:
 			return state

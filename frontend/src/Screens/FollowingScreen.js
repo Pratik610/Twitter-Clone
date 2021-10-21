@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Sidenav from '../Components/Sidenav'
 import News from '../Components/News'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import MobileNav from '../Components/MobileNav'
 import TweetModal from '../Components/TweetModal'
 import Loader from '../Components/Loader.js'
@@ -14,6 +14,7 @@ import {
 	getFollowingUsers,
 	unfollowUser,
 	followUser,
+	getUserById,
 } from '../Actions/userAction.js'
 
 const FollowingScreen = ({ history }) => {
@@ -31,6 +32,12 @@ const FollowingScreen = ({ history }) => {
 	const userUnfollow = useSelector((state) => state.userUnfollow)
 	const { unfollow } = userUnfollow
 
+	const userById = useSelector((state) => state.userById)
+	const { userData } = userById
+
+	const search = useLocation().search
+	const id = new URLSearchParams(search).get('id')
+
 	useEffect(() => {
 		if (!userId) {
 			history.push('/login')
@@ -38,9 +45,15 @@ const FollowingScreen = ({ history }) => {
 			if (!userInfo) {
 				dispatch(getLoginUserInfo(userId._id))
 			}
-			dispatch(getFollowingUsers(userId._id))
+
+			if (id) {
+				dispatch(getUserById(id))
+				dispatch(getFollowingUsers(id))
+			} else {
+				dispatch(getFollowingUsers(userId._id))
+			}
 		}
-	}, [userId, history, dispatch, userInfo, unfollow])
+	}, [userId, history, dispatch, userInfo, unfollow, id])
 
 	return (
 		<>
@@ -94,10 +107,10 @@ const FollowingScreen = ({ history }) => {
 							</div>
 							<div className='d-none mt-2 d-md-block'>
 								<h5 className='roboto ms-2 text-capitalize font-weight-bold text-light mb-0'>
-									{userInfo.name}
+									{id ? userData && userData.name : userInfo.name}
 								</h5>
 								<small className='text-muted  ms-2 mt-0'>
-									{userInfo.atTheRate}
+									{id ? userData && userData.atTheRate : userInfo.atTheRate}
 								</small>
 							</div>
 
@@ -136,7 +149,7 @@ const FollowingScreen = ({ history }) => {
 								<li className='nav-item pt-2 pb-0 col-6' role='presentation'>
 									<Link
 										className='text-decoration-none text-light'
-										to={'/followers'}>
+										to={`${id ? `/followers?id=${id}` : '/followers'}`}>
 										<div
 											id='profile-tab'
 											data-bs-toggle='tab'
@@ -201,35 +214,37 @@ const FollowingScreen = ({ history }) => {
 														</span>
 													</Link>
 												</div>
-												<div className=' col-5 '>
-													{userInfo.followers.find((id) => {
-														return id === userId._id
-													}) ? (
-														<button
-															className='float-end mx-auto btn p-4 pt-1 pb-1 text-light  '
-															onClick={() => dispatch(unfollowUser(user._id))}
-															style={{
-																borderRadius: '20px',
-																border: '2px solid grey',
-																fontWeight: 'bold',
-															}}>
-															Unfollow
-														</button>
-													) : (
-														<button
-															className='float-end mx-auto btn p-4 pt-1 pb-1   '
-															onClick={() => dispatch(followUser(user._id))}
-															style={{
-																borderRadius: '20px',
-																border: '2px solid grey',
-																background: 'white',
-																color: 'black',
-																fontWeight: 'bold',
-															}}>
-															Follow
-														</button>
-													)}
-												</div>
+												{user._id !== userInfo._id && (
+													<div className=' col-5 '>
+														{userInfo.followers.find((id) => {
+															return id === user._id
+														}) ? (
+															<button
+																className='float-end mx-auto btn p-4 pt-1 pb-1 text-light  '
+																onClick={() => dispatch(unfollowUser(user._id))}
+																style={{
+																	borderRadius: '20px',
+																	border: '2px solid grey',
+																	fontWeight: 'bold',
+																}}>
+																Unfollow
+															</button>
+														) : (
+															<button
+																className='float-end mx-auto btn p-4 pt-1 pb-1   '
+																onClick={() => dispatch(followUser(user._id))}
+																style={{
+																	borderRadius: '20px',
+																	border: '2px solid grey',
+																	background: 'white',
+																	color: 'black',
+																	fontWeight: 'bold',
+																}}>
+																Follow
+															</button>
+														)}
+													</div>
+												)}
 											</div>
 										))}
 									{following && following.length === 0 && (

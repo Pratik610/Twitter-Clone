@@ -30,6 +30,7 @@ import {
 	bookmarkTweetReducer,
 	unbookmarkTweetReducer,
 	bookmarkedTweetsReducer,
+	deleteTweetReducer,
 } from './Reducers/tweetReducer.js'
 
 const reducer = combineReducers({
@@ -59,6 +60,7 @@ const reducer = combineReducers({
 	bookmarkTweet: bookmarkTweetReducer,
 	unbookmarkTweet: unbookmarkTweetReducer,
 	bookmarkedTweets: bookmarkedTweetsReducer,
+	deleteTweet: deleteTweetReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userId')

@@ -129,28 +129,30 @@ const MobileNav = ({ userInfo, hide }) => {
 			{/* ............................. */}
 
 			{userInfo && (
-				<div className='d-flex justify-content-between tweets  p-3 pt-2 pb-2 '>
-					<div className=''>
-						<img
-							style={{ borderRadius: '50%' }}
-							className='dp-sm  img-fluid'
-							src={userInfo.profilePhoto}
-							alt='profile'
-							onError={(e) => (e.target.src = '/uploads/default.png')}
-							onClick={open}
-						/>
-					</div>
-					<div className=' '>
-						<Link className='text-decoration-none ' to={'/'}>
+				<div id='top' className='w-100'>
+					<div className='d-flex justify-content-between tweets  p-3 pt-2 pb-2 '>
+						<div className=''>
+							<img
+								style={{ borderRadius: '50%' }}
+								className='dp-sm  img-fluid'
+								src={userInfo.profilePhoto}
+								alt='profile'
+								onError={(e) => (e.target.src = '/uploads/default.png')}
+								onClick={open}
+							/>
+						</div>
+						<div className=' '>
+							<Link className='text-decoration-none ' to={'/'}>
+								<i
+									className='fab   fa-twitter '
+									style={{ fontSize: '25px', color: '#1A91DA' }}></i>
+							</Link>
+						</div>
+						<div className=' '>
 							<i
-								className='fab   fa-twitter '
-								style={{ fontSize: '25px', color: '#1A91DA' }}></i>
-						</Link>
-					</div>
-					<div className=' '>
-						<i
-							className='fas text-light fa-download'
-							style={{ fontSize: '20px' }}></i>
+								className='fas text-light fa-download'
+								style={{ fontSize: '20px' }}></i>
+						</div>
 					</div>
 				</div>
 			)}

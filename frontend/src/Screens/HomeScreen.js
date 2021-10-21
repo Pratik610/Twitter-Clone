@@ -20,6 +20,7 @@ import {
 	unretweet,
 	bookmark,
 	unbookmark,
+	tweetDelete,
 } from '../Actions/tweetAction.js'
 import { getLoginUserInfo } from '../Actions/userAction.js'
 
@@ -54,6 +55,9 @@ const HomeScreen = ({ history }) => {
 	const unbookmarkTweet = useSelector((state) => state.unbookmarkTweet)
 	const { unbookmarkedTweet: unbTweet } = unbookmarkTweet
 
+	const deleteTweet = useSelector((state) => state.deleteTweet)
+	const { delete: del } = deleteTweet
+
 	useEffect(() => {
 		if (!userId) {
 			history.push('/login')
@@ -70,12 +74,18 @@ const HomeScreen = ({ history }) => {
 		liked,
 		unliked,
 		userInfo,
+		del,
 		ret,
 		unret,
 		bTweet,
 		unbTweet,
 		tweetCreated,
 	])
+
+	const scroll = () => {
+		console.log('ji')
+		document.getElementById('top').style.position = 'absolute'
+	}
 
 	const [text, setText] = useState('')
 	const [image, setImage] = useState('')
@@ -118,6 +128,11 @@ const HomeScreen = ({ history }) => {
 		})
 	}
 
+	const deleteTweetByID = (id) => {
+		if (window.confirm('Delete Tweet ?')) {
+			dispatch(tweetDelete(id))
+		}
+	}
 	if (followingTweet) {
 		for (let i = 0; i < followingTweet.tweets.length; i++) {
 			for (let j = 0; j < followingTweet.users.length; j++) {
@@ -170,6 +185,8 @@ const HomeScreen = ({ history }) => {
 						</div>
 
 						<div
+							id='tweets-section'
+							onScroll={scroll}
 							className='col-12 col-md-10 col-lg-6 p-0 tweets-section '
 							style={{ height: '100vh', overflowY: 'scroll' }}>
 							{/* input tweet */}
@@ -301,36 +318,54 @@ const HomeScreen = ({ history }) => {
 																								'/uploads/default.png')
 																						}
 																					/>
-																					<div
-																						className='line w-100 mx-auto '
-																						style={{
-																							width: '100%',
-																							height: '100%',
-																						}}>
-																						<p
-																							className='text-center mx-auto bg-dark'
-																							style={{
-																								width: '2px',
-																								height: '100%',
-																							}}></p>
-																					</div>
 																				</Link>
 																			</div>
 																			<div className='col-10 mb-3 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
-																				<Link
-																					className='text-decoration-none text-light'
-																					to={`/user/${user._id}`}>
-																					<h6 className='mb-0 roboto d-inline-block pe-1'>
-																						{user.name}
-																					</h6>
-																					<span
-																						className='text-muted'
-																						style={{
-																							fontSize: '0.8em',
-																						}}>
-																						{userInfo.atTheRate}
-																					</span>
-																				</Link>
+																				<div className='d-flex justify-content-between'>
+																					<Link
+																						className='text-decoration-none text-light'
+																						to={`/user/${user._id}`}>
+																						<div>
+																							<h6 className='mb-0 roboto  d-inline-block pe-1'>
+																								{user.name}
+																							</h6>
+																							<span
+																								className='text-muted'
+																								style={{ fontSize: '0.8em' }}>
+																								{user.atTheRate}
+																							</span>
+																						</div>
+																					</Link>
+																					<div className='pe-4 pe-md-2'>
+																						{userInfo._id === user._id && (
+																							<div class='btn-group'>
+																								<i
+																									className='text-light h3 float-right fas fa-ellipsis-h '
+																									type='button'
+																									data-bs-toggle='dropdown'
+																									aria-expanded='false'></i>
+																								<ul className='dropdown-menu  bg-dark'>
+																									<div className='d-flex text-light justify-content-center align-items-centers'>
+																										<i
+																											style={{
+																												color: 'red',
+																											}}
+																											onClick={() => {
+																												deleteTweetByID(
+																													mainTweet._id
+																												)
+																											}}
+																											className='far  fa-trash-alt pb-0 pe-2'>
+																											<span className='ps-2 roboto'>
+																												Delete
+																											</span>
+																										</i>{' '}
+																									</div>
+																								</ul>
+																							</div>
+																						)}
+																					</div>
+																				</div>
 																				<Link
 																					className='text-decoration-none text-light'
 																					to={`/tweet/${mainTweet._id}`}>
@@ -458,18 +493,49 @@ const HomeScreen = ({ history }) => {
 												</Link>
 											</div>
 											<div className='col-10 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
-												<Link
-													className='text-decoration-none text-light'
-													to={`/user/${tweet.userdata._id}`}>
-													<h6 className='mb-0 roboto  d-inline-block pe-1'>
-														{tweet.userdata.name}
-													</h6>
-													<span
-														className='text-muted'
-														style={{ fontSize: '0.8em' }}>
-														{tweet.userdata.atTheRate}
-													</span>
-												</Link>
+												<div className='d-flex justify-content-between'>
+													<Link
+														className='text-decoration-none text-light'
+														to={`/user/${tweet.userdata._id}`}>
+														<div>
+															<h6 className='mb-0 roboto  d-inline-block pe-1'>
+																{tweet.userdata.name}
+															</h6>
+															<span
+																className='text-muted'
+																style={{ fontSize: '0.8em' }}>
+																{tweet.userdata.atTheRate}
+															</span>
+														</div>
+													</Link>
+													<div className='pe-4 pe-md-2'>
+														{userInfo._id === tweet.userdata._id && (
+															<div class='btn-group'>
+																<i
+																	className='text-light h3 float-right fas fa-ellipsis-h '
+																	type='button'
+																	data-bs-toggle='dropdown'
+																	aria-expanded='false'></i>
+																<ul className='dropdown-menu  bg-dark'>
+																	<div className='d-flex text-light justify-content-center align-items-centers'>
+																		<i
+																			style={{
+																				color: 'red',
+																			}}
+																			onClick={() => {
+																				deleteTweetByID(tweet._id)
+																			}}
+																			className='far  fa-trash-alt pb-0 pe-2'>
+																			<span className='ps-2 roboto'>
+																				Delete
+																			</span>
+																		</i>{' '}
+																	</div>
+																</ul>
+															</div>
+														)}
+													</div>
+												</div>
 
 												<Link
 													className='text-decoration-none text-light'

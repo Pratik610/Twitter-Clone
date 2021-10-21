@@ -313,3 +313,20 @@ export const repliedTweets = asyncHandler(async (req, res) => {
 		throw new Error('User not Found')
 	}
 })
+
+// desc - Delete Tweet
+// req / route - Delete , /api/tweet/delete
+// access - private
+export const deleteTweet = asyncHandler(async (req, res) => {
+	const tweets = await Tweet.deleteOne({
+		_id: req.params.id,
+		user: req.user._id,
+	})
+
+	if (tweets) {
+		res.status(201).json({ message: 'DELETED' })
+	} else {
+		res.status(404)
+		throw new Error('Tweet not Found')
+	}
+})

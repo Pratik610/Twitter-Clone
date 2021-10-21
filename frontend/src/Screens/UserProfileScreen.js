@@ -226,12 +226,20 @@ const UserProfileScreen = ({ history, match }) => {
 										{userData.createdAt.substring(0, 10)}
 									</p>
 									<span className='text-light'>
-										{userData.following.length}{' '}
-										<span className='text-muted'> Following </span>
+										<Link
+											className=' text-muted text-decoration-none'
+											to={`/following?id=${userData._id}`}>
+											{userData.following.length}{' '}
+											<span className='text-muted'> Following</span>
+										</Link>{' '}
 									</span>
 									<span className='p-3 text-light'>
-										{userData.followers.length}
-										<span className='text-muted'> Followers</span>{' '}
+										<Link
+											className=' text-muted text-decoration-none'
+											to={`/followers?id=${userData._id}`}>
+											{userData.followers.length}
+											<span className='text-muted'> Followers</span>{' '}
+										</Link>{' '}
 									</span>
 								</div>
 
