@@ -344,6 +344,19 @@ const UserProfileScreen = ({ history, match }) => {
 																								}
 																							/>
 																						</Link>
+																						<div
+																							className='line w-100 mx-auto '
+																							style={{
+																								width: '100%',
+																								height: '100%',
+																							}}>
+																							<p
+																								className='text-center mx-auto bg-dark'
+																								style={{
+																									width: '2px',
+																									height: '100%',
+																								}}></p>
+																						</div>
 																					</div>
 																					<div className='col-10 mb-3 col-md-11 pt-2 text-light p-1 ps-2 ps-md-4'>
 																						<Link
