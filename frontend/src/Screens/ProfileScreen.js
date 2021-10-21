@@ -365,7 +365,7 @@ const ProfileScreen = ({ history }) => {
 																											user._id && (
 																											<div class='btn-group'>
 																												<i
-																													className='text-light h3 float-right fas fa-ellipsis-h '
+																													className='text-muted h5 float-right fas fa-ellipsis-h '
 																													type='button'
 																													data-bs-toggle='dropdown'
 																													aria-expanded='false'></i>
@@ -542,7 +542,7 @@ const ProfileScreen = ({ history }) => {
 																		{userInfo._id && (
 																			<div class='btn-group'>
 																				<i
-																					className='text-light h3 float-right fas fa-ellipsis-h '
+																					className='text-muted h5 float-right fas fa-ellipsis-h '
 																					type='button'
 																					data-bs-toggle='dropdown'
 																					aria-expanded='false'></i>

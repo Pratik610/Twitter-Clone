@@ -82,18 +82,9 @@ const HomeScreen = ({ history }) => {
 		tweetCreated,
 	])
 
-	const scroll = () => {
-		console.log('ji')
-		document.getElementById('top').style.position = 'absolute'
-	}
-
 	const [text, setText] = useState('')
 	const [image, setImage] = useState('')
 	const [imageLoading, setImageLoading] = useState(false)
-
-	// const loadFile = (e) => {
-	// 	setImage(URL.createObjectURL(e.target.files[0]))
-	// }
 
 	const uploadFileHandler = async (e) => {
 		setImageLoading(true)
@@ -186,7 +177,6 @@ const HomeScreen = ({ history }) => {
 
 						<div
 							id='tweets-section'
-							onScroll={scroll}
 							className='col-12 col-md-10 col-lg-6 p-0 tweets-section '
 							style={{ height: '100vh', overflowY: 'scroll' }}>
 							{/* input tweet */}
@@ -340,7 +330,7 @@ const HomeScreen = ({ history }) => {
 																						{userInfo._id === user._id && (
 																							<div class='btn-group'>
 																								<i
-																									className='text-light h3 float-right fas fa-ellipsis-h '
+																									className='text-muted h5 float-right fas fa-ellipsis-h '
 																									type='button'
 																									data-bs-toggle='dropdown'
 																									aria-expanded='false'></i>
@@ -512,7 +502,7 @@ const HomeScreen = ({ history }) => {
 														{userInfo._id === tweet.userdata._id && (
 															<div class='btn-group'>
 																<i
-																	className='text-light h3 float-right fas fa-ellipsis-h '
+																	className='text-muted h5  float-right fas fa-ellipsis-h '
 																	type='button'
 																	data-bs-toggle='dropdown'
 																	aria-expanded='false'></i>
