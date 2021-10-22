@@ -158,8 +158,8 @@ const UserProfileScreen = ({ history, match }) => {
 								<div
 									className='cover pt-1 '
 									style={{
-										backgroundImage: `url(uploads/${
-											userData.coverPhoto.split('uploads/')[1]
+										backgroundImage: `url(/uploads/${
+											userData.coverPhoto.split('uploads')[1]
 										})`,
 										backgroundRepeat: 'no-repeat',
 										backgroundPosition: `${userData.posi}`,
